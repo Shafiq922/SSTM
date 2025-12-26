@@ -30,7 +30,7 @@ Route::prefix('user')->name('user.')->group(function () {
     Route::post('ticket/incident', [IncidentController::class, 'store'])->name('ticket.incident.store');
 });
 //user profile
-Route::prefix('user')->name('user.')->middleware(['auth'])->group(function() {
+Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('profile', [UserProfileController::class, 'show'])->name('profile.show');
     Route::post('profile', [UserProfileController::class, 'update'])->name('profile.update');
 });

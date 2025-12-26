@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'roleID',
+        'departmentID',
     ];
 
     /**
@@ -45,4 +47,34 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    protected $primaryKey = 'userID';
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'roleID');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'departmentID');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'userID');
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class, 'userID');
+    }
+
+    public function ticketLogs()
+    {
+        return $this->hasMany(TicketLog::class, 'userID');
+    }
 }
+
+

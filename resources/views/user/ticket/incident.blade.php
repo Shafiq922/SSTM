@@ -18,6 +18,63 @@
                 <input type="text" class="w-full border border-gray-300 rounded-lg p-2.5" />
             </div>
 
+            <!-- Row: Category / Sub-category -->
+            <div class="grid grid-cols-3 gap-6">
+
+                <!-- Category -->
+                <div class="relative">
+                    <label class="block mb-1 font-medium">
+                        Category <span class="text-red-600 text-xs">(required)</span>
+                    </label>
+                    <button type="button" id="categoryDropdownButton" data-dropdown-toggle="categoryDropdown"
+                        class="w-full flex justify-between items-center border border-gray-300 bg-gray-100 rounded-lg px-4 py-2.5">
+                        <span>Select category</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div id="categoryDropdown" class="hidden z-10 w-full bg-white rounded-lg shadow border border-gray-200">
+                        <ul class="py-2 text-sm">
+                            <li><button type="button"
+                                    class="block w-full px-4 py-2 text-left hover:bg-gray-100">Hardware</button></li>
+                            <li><button type="button"
+                                    class="block w-full px-4 py-2 text-left hover:bg-gray-100">Software</button></li>
+                            <li><button type="button"
+                                    class="block w-full px-4 py-2 text-left hover:bg-gray-100">Network</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sub-category -->
+                <div class="relative">
+                    <label class="block mb-1 font-medium">
+                        Sub-category <span class="text-red-600 text-xs">(required)</span>
+                    </label>
+                    <button type="button" id="subCategoryDropdownButton" data-dropdown-toggle="subCategoryDropdown"
+                        class="w-full flex justify-between items-center border border-gray-300 bg-gray-100 rounded-lg px-4 py-2.5">
+                        <span class="text-sm">Select sub-category</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div id="subCategoryDropdown"
+                        class="hidden z-10 w-full bg-white rounded-lg shadow border border-gray-200">
+                        <ul class="py-2 text-sm">
+                            <li><button type="button"
+                                    class="block w-full px-4 py-2 text-left hover:bg-gray-100">Laptop</button></li>
+                            <li><button type="button"
+                                    class="block w-full px-4 py-2 text-left hover:bg-gray-100">Desktop</button></li>
+                            <li><button type="button"
+                                    class="block w-full px-4 py-2 text-left hover:bg-gray-100">Printer</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
             <!-- Row: Impact / Urgency / Calculated Priority -->
             <div class="grid grid-cols-3 gap-6">
 
@@ -119,7 +176,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-                <div id="typeDropdown" class="hidden z-10 w-full max-w-full bg-white rounded-lg shadow border border-gray-200">
+                <div id="typeDropdown"
+                    class="hidden z-10 w-full max-w-full bg-white rounded-lg shadow border border-gray-200">
                     <ul class="py-2 text-sm w-full">
                         <li><button type="button"
                                 class="block w-full text-left px-4 py-2 hover:bg-gray-100">Hardware</button></li>
