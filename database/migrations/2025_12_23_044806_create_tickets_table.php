@@ -34,11 +34,13 @@ return new class extends Migration {
             $table->timestamps();
 
             // Foreign keys
-            $table->foreignId('assigneeID')->nullable()->constrained('users', 'userID')->nullOnDelete();;
+            $table->foreignId('assigneeID')->nullable()->constrained('users', 'userID')->nullOnDelete();
+            ;
             $table->foreignId('userID')->constrained('users', 'userID')->cascadeOnDelete();
             $table->foreignId('slaID')->constrained('sla', 'slaID');
             $table->foreignId('categoryID')->constrained('categories', 'categoryID');
             $table->foreignId('subCategoryID')->constrained('sub_categories', 'subCategoryID');
+            $table->foreignId('summaryTemplateID')->nullable()->constrained('summary_templates', 'summaryTemplateID');
         });
 
 

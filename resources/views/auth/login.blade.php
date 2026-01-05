@@ -5,7 +5,8 @@
             <div class="w-full max-w-md space-y-6">
                 <!-- Logo + Title -->
                 <div class="flex items-center space-x-2 mb-4">
-                    <div class="flex items-center justify-center w-8 h-8 bg-teal-600 text-white font-bold rounded">T</div>
+                    <div class="flex items-center justify-center w-8 h-8 bg-teal-600 text-white font-bold rounded">T
+                    </div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-gray-900">
                         MyTicket+ <span class="font-semibold">Admin Portal</span>
                     </h1>
@@ -25,17 +26,16 @@
                         <x-input-label for="email" :value="__('Email')" />
                         <div class="relative mt-1">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke="currentColor">
+                                <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 20 20" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M2.003 5.884L10 10.882l7.997-4.998M18 8v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8" />
                                 </svg>
                             </div>
                             <x-text-input id="email"
-                                class="block w-full pl-10 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-teal-500 focus:border-teal-500"
-                                type="email"
-                                name="email"
-                                :value="old('email')"
-                                required autofocus autocomplete="username" />
+                                class="block w-full pl-10 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-100 dark:text-gray-900 dark:border-gray-300"
+                                type="email" name="email" :value="old('email')" required autofocus
+                                autocomplete="username" />
                         </div>
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
@@ -45,12 +45,13 @@
                         <x-input-label for="password" :value="__('Password')" />
                         <div class="relative mt-1">
                             <x-text-input id="password"
-                                class="block w-full pr-10 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-teal-500 focus:border-teal-500"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-                            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3" onclick="togglePassword()">
-                                <svg id="eyeIcon" class="w-5 h-5 text-gray-500 hover:text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                class="block w-full pr-10 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-100 dark:text-gray-900 dark:border-gray-300"
+                                type="password" name="password" required autocomplete="current-password" />
+                            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3"
+                                onclick="togglePassword()">
+                                <svg id="eyeIcon" class="w-5 h-5 text-gray-500 hover:text-gray-700"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

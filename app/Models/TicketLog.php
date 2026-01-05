@@ -8,6 +8,13 @@ class TicketLog extends Model
 {
     protected $primaryKey = 'ticketLogID';
 
+    protected $fillable = [
+        'ticketID',
+        'userID',
+        'action',
+        'description',
+    ];
+
     public function ticket()
     {
         return $this->belongsTo(Ticket::class, 'ticketID');

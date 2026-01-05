@@ -25,7 +25,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 /* User navbar menu */
 //create incident
-Route::prefix('user')->name('user.')->group(function () {
+Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('ticket/incident', [IncidentController::class, 'create'])->name('ticket.incident.create');
     Route::post('ticket/incident', [IncidentController::class, 'store'])->name('ticket.incident.store');
 });

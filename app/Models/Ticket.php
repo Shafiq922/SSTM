@@ -34,13 +34,13 @@ class Ticket extends Model
         'started_at' => 'datetime',
         'resolved_at' => 'datetime',
     ];
-    
+
     // Relationship 1: The Requester
     public function user()
     {
         return $this->belongsTo(User::class, 'userID');
     }
-  
+
     // Relationship 2: The Assignee
     public function assignee()
     {
@@ -70,6 +70,11 @@ class Ticket extends Model
     public function attachments()
     {
         return $this->hasMany(Attachment::class, 'ticketID');
+    }
+
+    public function summaryTemplate()
+    {
+        return $this->belongsTo(SummaryTemplate::class, 'summaryTemplateID');
     }
 }
 

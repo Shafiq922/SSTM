@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             SubCategoriesTableSeeder::class,
             SLATableSeeder::class,
             UsersTableSeeder::class,
+            SummaryTemplateSeeder::class,
             TicketsTableSeeder::class,
             AttachmentsTableSeeder::class,
         ]);

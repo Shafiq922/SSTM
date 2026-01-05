@@ -14,7 +14,7 @@
             <!-- Status dropdown -->
             <button id="dropdownStatusButton" data-dropdown-toggle="dropdownStatus"
                 class="text-sm text-gray-600 dark:text-gray-300 font-medium flex items-center hover:text-gray-900 dark:hover:text-white">
-                All open tickets
+                {{ $filterLabel }}
                 <svg class="w-3 h-3 ms-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="m1 1 4 4 4-4" />
@@ -25,26 +25,24 @@
             <div id="dropdownStatus"
                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownStatusButton">
-                    <li><a href="#"
+                    <li><a href="{{ route('dashboard', ['filter' => 'all']) }}"
                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">All
                             tickets</a></li>
-                    <li><a href="#"
+                    <li><a href="{{ route('dashboard', ['filter' => 'open']) }}"
                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Open
                             tickets</a></li>
-                    <li><a href="#"
+                    <li><a href="{{ route('dashboard', ['filter' => 'closed']) }}"
                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Closed
                             tickets</a></li>
                 </ul>
             </div>
         </div>
 
-        <!-- Center group: Filter + count + search -->
-        <!-- Center group moved to right -->
         <div class="flex items-center space-x-4 ml-auto justify-end">
 
-            <!-- Filter dropdown -->
-            <button id="dropdownFilterButton" data-dropdown-toggle="dropdownFilter"
-                class="flex items-center text-teal-600 text-sm font-medium hover:text-teal-700 dark:text-teal-400">
+            <!-- Filter button -->
+            <button id="dropdownFilterButton" data-dropdown-toggle="dropdownFilter" data-dropdown-placement="bottom-start"
+                class="flex items-center text-teal-600 text-sm font-medium hover:text-teal-700">
                 <svg class="w-4 h-4 me-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -57,32 +55,17 @@
                 </svg>
             </button>
 
-            <!-- Filter Dropdown Menu -->
-            <div id="dropdownFilter"
-                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownFilterButton">
-                    <li><a href="#"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Priority:
-                            High</a></li>
-                    <li><a href="#"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Priority:
-                            Low</a></li>
-                    <li><a href="#"
-                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Assigned
-                            to me</a></li>
-                </ul>
-            </div>
+            <!-- Selected count -->
+            <span id="selectedCount" class="text-sm text-gray-500 whitespace-nowrap">
+                0 of 20 selected
+            </span>
 
-            <!-- Count -->
-            <span class="text-sm text-gray-500 dark:text-gray-400">0 of 20 selected</span>
-
-            <!-- Search box -->
+            <!-- Search -->
             <form class="relative">
-                <input type="text" id="table-search"
-                    class="block w-64 p-2 ps-3 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                <input type="text"
+                    class="block w-64 p-2 ps-3 text-sm border border-gray-300 rounded-md bg-white focus:ring-teal-500 focus:border-teal-500"
                     placeholder="Search">
-                <button type="submit"
-                    class="absolute right-2.5 top-2.5 text-gray-500 hover:text-gray-700 dark:text-gray-300">
+                <button type="submit" class="absolute right-2.5 top-2.5 text-gray-500">
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -92,6 +75,102 @@
             </form>
         </div>
 
+        <!-- FILTER DROPDOWN -->
+        <div id="dropdownFilter" class="z-50 hidden w-96 rounded-lg border border-gray-200 bg-white shadow-lg">
+
+            <!-- Selected filters -->
+            <div class="border-b p-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-gray-700">Selected filters</h3>
+                    <button id="clearFilters" class="text-xs text-teal-600 hover:underline">Clear</button>
+                </div>
+
+                <div id="selectedFilters" class="mt-2 flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- Accordion -->
+            <div id="filterAccordion" data-accordion="collapse" class="max-h-80 overflow-y-auto p-4">
+
+                <!-- Active Approval -->
+                <h2>
+                    <button type="button"
+                        class="flex w-full items-center justify-between py-2 text-sm font-medium text-gray-700"
+                        data-accordion-target="#filter-1">
+                        Active Approval
+                        <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </h2>
+
+                <div id="filter-1" class="hidden pb-3">
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="filter-checkbox" data-group="Active Approval" data-value="Yes">
+                        Yes
+                    </label>
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="filter-checkbox" data-group="Active Approval" data-value="No">
+                        No
+                    </label>
+                </div>
+
+                <!-- Approval Status -->
+                <h2>
+                    <button type="button"
+                        class="flex w-full items-center justify-between py-2 text-sm font-medium text-gray-700"
+                        data-accordion-target="#filter-2">
+                        Approval status
+                        <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </h2>
+
+                <div id="filter-2" class="hidden pb-3">
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="filter-checkbox" data-group="Approval status" data-value="Approved">
+                        Approved
+                    </label>
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="filter-checkbox" data-group="Approval status" data-value="Pending">
+                        Pending
+                    </label>
+                </div>
+
+                <!-- Assignee -->
+                <h2>
+                    <button type="button"
+                        class="flex w-full items-center justify-between py-2 text-sm font-medium text-gray-700"
+                        data-accordion-target="#filter-3">
+                        Assignee
+                        <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </h2>
+
+                <div id="filter-3" class="hidden pb-3">
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="filter-checkbox" data-group="Assignee" data-value="Me">
+                        Me
+                    </label>
+                    <label class="flex items-center gap-2 text-sm">
+                        <input type="checkbox" class="filter-checkbox" data-group="Assignee" data-value="Unassigned">
+                        Unassigned
+                    </label>
+                </div>
+            </div>
+
+            <!-- Apply / Reset -->
+            <div class="sticky bottom-0 bg-white border-t p-3 flex gap-2">
+                <button id="resetFilters" class="w-full rounded-md border border-gray-300 py-2 text-sm hover:bg-gray-100">
+                    Reset
+                </button>
+                <button id="applyFilters" class="w-full rounded-md bg-teal-600 py-2 text-sm text-white hover:bg-teal-700">
+                    Apply
+                </button>
+            </div>
+        </div>
     </section>
 
 
@@ -101,7 +180,7 @@
             <thead class="text-xs uppercase bg-gray-50 text-gray-600">
                 <tr>
                     <th scope="col" class="p-3">
-                        <input type="checkbox"
+                        <input type="checkbox" id="checkbox-all"
                             class="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500">
                     </th>
                     <th scope="col" class="px-4 py-3">Priority</th>
@@ -115,31 +194,115 @@
             </thead>
 
             <tbody>
-                <tr class="border-b hover:bg-gray-50">
-                    <td class="p-3"><input type="checkbox"
-                            class="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500"></td>
-                    <td class="px-4 py-2">S4</td>
-                    <td class="px-4 py-2">WO00923453</td>
-                    <td class="px-4 py-2">Afiq Ahmad</td>
-                    <td class="px-4 py-2">Shafiq Aiman</td>
-                    <td class="px-4 py-2">MDM - Master Data Operation - Customer</td>
-                    <td class="px-4 py-2"><span class="text-yellow-600 font-medium">Pending</span></td>
-                    <td class="px-4 py-2">Jul 7, 2025, 10:09:36 AM</td>
-                </tr>
-
-                <tr class="border-b hover:bg-gray-50">
-                    <td class="p-3"><input type="checkbox"
-                            class="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500"></td>
-                    <td class="px-4 py-2">S4</td>
-                    <td class="px-4 py-2">WO00923453</td>
-                    <td class="px-4 py-2">Zahira Ismail</td>
-                    <td class="px-4 py-2">Shafiq Aiman</td>
-                    <td class="px-4 py-2">MDM - Master Data Operation - External Customer</td>
-                    <td class="px-4 py-2"><span class="text-yellow-600 font-medium">Pending</span></td>
-                    <td class="px-4 py-2">Jul 7, 2025, 10:09:36 AM</td>
-                </tr>
-
+                @forelse($tickets as $ticket)
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-3">
+                            <input type="checkbox"
+                                class="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500 checkbox-item">
+                        </td>
+                        <td class="px-4 py-2">{{ $ticket->priority }}</td>
+                        <td class="px-4 py-2">{{ $ticket->ticket_number }}</td>
+                        <td class="px-4 py-2">{{ $ticket->user->name ?? 'Unknown' }}</td>
+                        <td class="px-4 py-2">{{ $ticket->assignee->name ?? 'Unassigned' }}</td>
+                        <td class="px-4 py-2">{{ Str::limit($ticket->summary, 50) }}</td>
+                        <td class="px-4 py-2">
+                            @php
+                                $statusColor = match ($ticket->status) {
+                                    'Open' => 'text-blue-600',
+                                    'In Progress' => 'text-yellow-600',
+                                    'Closed' => 'text-green-600',
+                                    'Pending' => 'text-orange-600',
+                                    'Resolved' => 'text-green-600',
+                                    'Cancelled' => 'text-red-600',
+                                    default => 'text-gray-600',
+                                };
+                            @endphp
+                            <span class="{{ $statusColor }} font-medium">{{ $ticket->status }}</span>
+                        </td>
+                        <td class="px-4 py-2">{{ $ticket->updated_at?->format('M d, Y, h:i A') ?? 'N/A' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" class="px-4 py-4 text-center text-gray-500">
+                            No tickets found for: {{ $filterLabel }}
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxAll = document.getElementById('checkbox-all');
+            const checkboxItems = document.querySelectorAll('.checkbox-item');
+
+            if (checkboxAll) {
+                checkboxAll.addEventListener('change', function () {
+                    checkboxItems.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                    });
+                });
+
+                checkboxItems.forEach(checkbox => {
+                    checkbox.addEventListener('change', function () {
+                        if (!this.checked) {
+                            checkboxAll.checked = false;
+                        } else {
+                            const allChecked = Array.from(checkboxItems).every(c => c.checked);
+                            checkboxAll.checked = allChecked;
+                        }
+                    });
+                });
+            }
+        });
+
+        //FILTER LOGIC
+
+        const checkboxes = document.querySelectorAll('.filter-checkbox');
+        const selectedFilters = document.getElementById('selectedFilters');
+        const selectedCount = document.getElementById('selectedCount');
+
+        function updateFilters() {
+            selectedFilters.innerHTML = '';
+            let count = 0;
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    count++;
+                    const chip = document.createElement('span');
+                    chip.className = 'flex items-center gap-1 rounded-full bg-gray-200 px-3 py-1 text-xs';
+
+                    chip.innerHTML = `
+                        ${cb.dataset.group}: ${cb.dataset.value}
+                        <button class="ml-1 text-gray-500">&times;</button>
+                        `;
+
+                    chip.querySelector('button').onclick = () => {
+                        cb.checked = false;
+                        updateFilters();
+                    };
+
+                    selectedFilters.appendChild(chip);
+                }
+            });
+
+            selectedCount.textContent = `${count} of 20 selected`;
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
+
+        document.getElementById('resetFilters').onclick = () => {
+            checkboxes.forEach(cb => cb.checked = false);
+            updateFilters();
+        };
+
+        document.getElementById('clearFilters').onclick = () => {
+            checkboxes.forEach(cb => cb.checked = false);
+            updateFilters();
+        };
+
+        document.getElementById('applyFilters').onclick = () => {
+            console.log('Filters applied');
+        };
+    </script>
 @endsection

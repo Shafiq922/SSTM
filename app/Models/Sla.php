@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sla extends Model
 {
+    protected $table = 'sla';
+
     protected $primaryKey = 'slaID';
     // Add this inside the class
     protected $fillable = [
