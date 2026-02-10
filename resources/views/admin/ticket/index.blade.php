@@ -28,7 +28,7 @@
             /* gray-50 */
         }
     </style>
-    <div class="p-6 mt-20">
+    <div class="px-3 sm:px-4 lg:px-6 py-6 mt-20">
         @if (session('success'))
             <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
                 <strong>Success!</strong> {{ session('success') }}
@@ -41,7 +41,7 @@
         @endif
         <div class="sticky top-16 z-30 bg-gray-100/95 backdrop-blur-sm border-b shadow-sm">
             <!-- Tickets Toolbar -->
-            <section class="flex flex-wrap items-center justify-between px-6 py-3">
+            <section class="flex flex-wrap items-center justify-between gap-3 px-3 sm:px-6 py-3">
 
                 <!-- Left side: Title + dropdown -->
                 <div class="flex items-center space-x-4">
@@ -66,7 +66,7 @@
                     </div>
 
                     <!-- Priority Filter Badges -->
-                    <div class="flex items-center gap-2 ml-6">
+                    <div class="flex flex-wrap items-center gap-2 mt-2 sm:mt-0 sm:ml-6">
                         <span class="text-sm font-semibold text-gray-700 flex items-center gap-1">
                             <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -76,7 +76,7 @@
                         </span>
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Critical']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                            {{ request('priority') == 'Critical'
+                                                                                                                {{ request('priority') == 'Critical'
         ? 'bg-red-100 text-red-800 border-red-300 ring-2 ring-red-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200' }}">
                             Critical
@@ -84,7 +84,7 @@
 
                         <a href="{{ route('admin.tickets', ['priority' => 'High']) }}"
                             class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                            {{ request('priority') == 'High'
+                                                                                                                {{ request('priority') == 'High'
         ? 'bg-orange-100 text-orange-800 border-orange-300 ring-2 ring-orange-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200' }}">
                             High
@@ -92,14 +92,14 @@
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Medium']) }}"
                             class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                            {{ request('priority') == 'Medium'
+                                                                                                                {{ request('priority') == 'Medium'
         ? 'bg-yellow-100 text-yellow-800 border-yellow-300 ring-2 ring-yellow-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200' }}">
                             Medium
                         </a>
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Low']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                            {{ request('priority') == 'Low'
+                                                                                                                {{ request('priority') == 'Low'
         ? 'bg-green-100 text-green-800 border-green-300 ring-2 ring-green-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200' }}">
                             Low
@@ -113,7 +113,7 @@
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-4 ml-auto justify-end">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 ml-auto justify-end">
 
                     <!-- Filter button -->
                     <button id="dropdownFilterButton" data-dropdown-toggle="dropdownFilter"
@@ -154,9 +154,9 @@
                     </form>
 
                     <!-- Search -->
-                    <form class="relative">
+                    <form class="relative w-full sm:w-auto">
                         <input type="text"
-                            class="block w-64 p-2 ps-3 text-sm border border-gray-300 rounded-md bg-white focus:ring-teal-500 focus:border-teal-500"
+                            class="block w-full sm:w-64 p-2 ps-3 text-sm border border-gray-300 rounded-md bg-white focus:ring-teal-500 focus:border-teal-500"
                             placeholder="Search">
                         <button type="submit" class="absolute right-2.5 top-2.5 text-gray-500">
                             <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"
@@ -169,7 +169,8 @@
                 </div>
 
                 <!-- FILTER DROPDOWN -->
-                <div id="dropdownFilter" class="z-50 hidden w-96 rounded-lg border border-gray-200 bg-white shadow-lg">
+                <div id="dropdownFilter"
+                    class="z-50 hidden w-[calc(100vw-2rem)] sm:w-96 rounded-lg border border-gray-200 bg-white shadow-lg">
 
                     <!-- Selected filters -->
                     <div class="border-b p-4">
@@ -547,10 +548,10 @@
                     if (urlParams.getAll(paramName).includes(value)) {
                         cb.checked = true;
                     }
-                     // Special handling for "Open Tickets" value vs "Open" param
+                    // Special handling for "Open Tickets" value vs "Open" param
                     if (group === 'All Tickets') {
                         let status = value.replace(' Tickets', '');
-                         if (urlParams.getAll('status[]').includes(status)) {
+                        if (urlParams.getAll('status[]').includes(status)) {
                             cb.checked = true;
                         }
                     }
@@ -568,9 +569,9 @@
                             chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
 
                             chip.innerHTML = `
-                                                        ${cb.dataset.group}: ${cb.dataset.value}
-                                                        <button class="ml-1 text-gray-500">&times;</button>
-                                                    `;
+                                                            ${cb.dataset.group}: ${cb.dataset.value}
+                                                            <button class="ml-1 text-gray-500">&times;</button>
+                                                        `;
 
                             chip.querySelector('button').onclick = () => {
                                 cb.checked = false;
@@ -601,7 +602,7 @@
                 }
 
                 document.getElementById('applyFilters').onclick = () => {
-                   const params = new URLSearchParams();
+                    const params = new URLSearchParams();
 
                     checkboxes.forEach(cb => {
                         if (cb.checked) {

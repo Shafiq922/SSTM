@@ -35,7 +35,7 @@
                 enctype="multipart/form-data">
                 @csrf
                 <!-- Using hidden type or assuming backend handles it based on route or other logic. 
-                                             For now reusing the incident route as requested for view duplication. -->
+                                                 For now reusing the incident route as requested for view duplication. -->
                 <input type="hidden" name="category_id" id="input_category_id">
                 <input type="hidden" name="sub_category_id" id="input_sub_category_id">
                 <input type="hidden" name="priority" id="input_priority">
@@ -126,8 +126,58 @@
 
                     <!-- Priority (Manual) -->
                     <div class="relative">
-                        <label class="block mb-2 text-sm font-semibold text-gray-700">Priority <span
-                                class="text-red-500">*</span></label>
+                        <div class="flex items-center gap-1 mb-2">
+                            <label class="block text-sm font-semibold text-gray-700">Priority <span
+                                    class="text-red-500">*</span></label>
+                            <button data-popover-target="popover-priority-info" data-popover-placement="bottom"
+                                type="button" class="text-gray-400 hover:text-teal-600 transition-colors">
+                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                </svg>
+                                <span class="sr-only">Show information</span>
+                            </button>
+                            <div data-popover id="popover-priority-info" role="tooltip"
+                                class="absolute z-50 invisible inline-block w-72 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0">
+                                <div class="px-3 py-2 bg-slate-800 border-b border-gray-200 rounded-t-lg">
+                                    <h3 class="font-semibold text-white">Priority SLA Times</h3>
+                                </div>
+                                <div class="px-3 py-2">
+                                    <table class="w-full text-xs text-left text-gray-700 border border-gray-300">
+                                        <thead class="text-xs text-gray-900 uppercase bg-gray-50 border-b border-gray-300">
+                                            <tr>
+                                                <th class="px-2 py-1 border-r border-gray-300 text-center">Priority</th>
+                                                <th class="px-2 py-1 border-r border-gray-300 text-center">Response Time
+                                                </th>
+                                                <th class="px-2 py-1 text-center">Resolution Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white border-b border-gray-300 hover:bg-gray-50">
+                                                <td class="px-2 py-1 border-r border-gray-300 font-bold text-orange-500">
+                                                    High</td>
+                                                <td class="px-2 py-1 border-r border-gray-300 text-center">1 hour</td>
+                                                <td class="px-2 py-1 text-center">8 hours</td>
+                                            </tr>
+                                            <tr class="bg-white border-b border-gray-300 hover:bg-gray-50">
+                                                <td
+                                                    class="px-2 py-1 border-r border-gray-300 font-semibold text-yellow-600">
+                                                    Medium</td>
+                                                <td class="px-2 py-1 border-r border-gray-300 text-center">4 hours</td>
+                                                <td class="px-2 py-1 text-center">2 days</td>
+                                            </tr>
+                                            <tr class="bg-white hover:bg-gray-50">
+                                                <td class="px-2 py-1 border-r border-gray-300 text-green-600">Low</td>
+                                                <td class="px-2 py-1 border-r border-gray-300 text-center">8 hours</td>
+                                                <td class="px-2 py-1 text-center">3 days</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div data-popper-arrow></div>
+                            </div>
+                        </div>
                         <button type="button" id="priorityDropdownButton"
                             class="w-full flex justify-between items-center bg-gray-50 text-gray-900 text-sm rounded-xl px-4 py-3.5 border-transparent hover:bg-white hover:ring-2 hover:ring-gray-200 focus:bg-white focus:ring-2 focus:ring-teal-500 transition-all duration-200">
                             <span id="priorityLabel" class="text-gray-500">Select priority</span>
@@ -206,8 +256,8 @@
                     <button type="button" id="removeFileBtn" class="hidden text-red-500 text-sm mt-2 hover:underline">Remove
                         selected file</button>
                     <!-- HTML5 required attribute on file input might not work with hidden input perfectly for UI feedback, 
-                                                 but standard form submission will catch it if not hidden, or we rely on backend validation.
-                                                 Ideally, we should add JS validation for the hidden file input. -->
+                                                     but standard form submission will catch it if not hidden, or we rely on backend validation.
+                                                     Ideally, we should add JS validation for the hidden file input. -->
                 </div>
 
                 <div class="flex justify-end gap-3 pt-6 border-t border-gray-100">
@@ -306,13 +356,13 @@
                     category.sub_categories.forEach(sub => {
                         const li = document.createElement('li');
                         li.innerHTML = `
-                                                                                                                                                                                                                                    <button type="button" 
-                                                                                                                                                                                                                                        class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
-                                                                                                                                                                                                                                        data-id="${sub.subCategoryID || sub.id}"
-                                                                                                                                                                                                                                        data-name="${sub.name}">
-                                                                                                                                                                                                                                        ${sub.name}
-                                                                                                                                                                                                                                    </button>
-                                                                                                                                                                                                                                `;
+                                                                                                                                                                                                                                        <button type="button" 
+                                                                                                                                                                                                                                            class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
+                                                                                                                                                                                                                                            data-id="${sub.subCategoryID || sub.id}"
+                                                                                                                                                                                                                                            data-name="${sub.name}">
+                                                                                                                                                                                                                                            ${sub.name}
+                                                                                                                                                                                                                                        </button>
+                                                                                                                                                                                                                                    `;
                         subCategoryList.appendChild(li);
                     });
 

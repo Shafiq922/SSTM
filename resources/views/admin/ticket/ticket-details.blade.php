@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex h-screen pt-16 overflow-hidden">
+    <div class="flex flex-col lg:flex-row min-h-screen lg:h-screen pt-16 overflow-auto lg:overflow-hidden">
         <!-- LEFT PANEL: Ticket Details (Scrollable) -->
-        <div class="w-2/3 h-full overflow-y-auto bg-white custom-scrollbar">
+        <div class="w-full lg:w-2/3 lg:h-full overflow-y-auto bg-white custom-scrollbar">
             <form action="{{ route('admin.ticket.update', $ticket->ticketID) }}" method="POST" enctype="multipart/form-data"
                 onsubmit="return confirm('Are you sure you want to save changes?');">
                 @csrf
                 @method('PUT')
-                <div class="px-8 py-6">
+                <div class="px-4 sm:px-6 lg:px-8 py-6">
                     <!-- Header -->
                     <div class="mb-6">
                         <div class="flex items-center justify-between mb-2">
@@ -404,7 +404,7 @@
         </div>
 
         <!-- RIGHT PANEL: Activity (Fixed Container, Internal Scroll) -->
-        <div class="w-1/3 h-full flex flex-col border-l border-gray-200 bg-gray-50">
+        <div class="w-full lg:w-1/3 lg:h-full flex flex-col border-t lg:border-t-0 lg:border-l border-gray-200 bg-gray-50">
             <!-- Header -->
             <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
                 <h2 class="font-bold text-gray-900">Activity</h2>

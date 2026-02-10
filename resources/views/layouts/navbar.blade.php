@@ -1,6 +1,6 @@
 <!-- Navbar -->
 <nav class="fixed top-0 left-0 w-full z-50 bg-teal-500 border-b border-teal-600">
-    <div class="w-full flex items-center justify-between px-6 p-3">
+    <div class="w-full flex flex-wrap items-center justify-between px-3 sm:px-4 md:px-6 p-3">
 
         <!-- Logo -->
         <a href="#" class="flex items-center space-x-2 rtl:space-x-reverse">
@@ -20,9 +20,9 @@
         </button>
 
         <!-- Nav Links (Centered) -->
-        <div class="hidden w-full md:flex md:w-auto md:items-center md:absolute md:left-1/2 md:transform md:-translate-x-1/2"
-            id="navbar-default">
-            <ul class="flex flex-col md:flex-row md:space-x-8 font-medium text-gray-900 dark:text-white">
+        <div class="hidden w-full md:flex md:w-auto md:items-center md:flex-1 md:justify-center" id="navbar-default">
+            <ul
+                class="flex flex-col mt-4 md:mt-0 md:flex-row md:space-x-8 font-medium text-gray-900 dark:text-white bg-teal-600 md:bg-transparent rounded-lg md:rounded-none p-4 md:p-0">
                 <li>
                     @if(auth()->user()->role && in_array(auth()->user()->role->name, ['Admin', 'IT Staff']))
                         <a href="{{ route('admin.tickets') }}" class="block py-2 px-3 hover:underline">Dashboard</a>
@@ -63,18 +63,20 @@
                                 </a>
                             </li>
 
-                            <!-- Service Request -->
-                            <li>
-                                <a href="{{ (auth()->user()->role && in_array(auth()->user()->role->name, ['Admin', 'IT Staff'])) ? route('admin.ticket.service_request.create') : route('user.ticket.service_request.create') }}"
-                                    class="flex items-center gap-2 px-4 py-2 hover:bg-[#5A4D4D] transition-colors duration-150">
-                                    <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M9 12h6m-6 4h6m-6-8h6M4 6h16M4 18h16" />
-                                    </svg>
-                                    Service Request
-                                </a>
-                            </li>
+                            <!-- Service Request (hidden for External Customer) -->
+                            @if(!(auth()->user()->role && auth()->user()->role->name === 'External Customer'))
+                                <li>
+                                    <a href="{{ (auth()->user()->role && in_array(auth()->user()->role->name, ['Admin', 'IT Staff'])) ? route('admin.ticket.service_request.create') : route('user.ticket.service_request.create') }}"
+                                        class="flex items-center gap-2 px-4 py-2 hover:bg-[#5A4D4D] transition-colors duration-150">
+                                        <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M9 12h6m-6 4h6m-6-8h6M4 6h16M4 18h16" />
+                                        </svg>
+                                        Service Request
+                                    </a>
+                                </li>
+                            @endif
 
                         </ul>
                     </div>
@@ -88,7 +90,7 @@
         </div>
 
         <!-- Right Icons -->
-        <div class="flex items-center space-x-5 rtl:space-x-reverse">
+        <div class="flex items-center space-x-3 sm:space-x-5 rtl:space-x-reverse">
 
 
             <!-- User Dropdown -->

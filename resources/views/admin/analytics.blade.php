@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="p-6 pt-20 bg-gray-50 min-h-screen">
+    <div class="px-3 sm:px-4 lg:px-6 py-6 pt-20 bg-gray-50 min-h-screen">
         <!-- Header -->
-        <div class="flex justify-between items-start mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start gap-2 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800">Ticket Support Dashboard</h1>
                 <p class="text-gray-500 text-sm">Monitor and manage your support tickets</p>
@@ -20,7 +20,8 @@
                         <p class="text-sm text-gray-500 mb-1">Total Tickets</p>
                         <p class="text-3xl font-bold text-gray-800">{{ $totalTickets }}</p>
                         <p class="text-xs {{ $totalTicketsTrend >= 0 ? 'text-green-600' : 'text-red-600' }} mt-1">
-                            {{ $totalTicketsTrend >= 0 ? '+' : '' }}{{ $totalTicketsTrend }}% from last week</p>
+                            {{ $totalTicketsTrend >= 0 ? '+' : '' }}{{ $totalTicketsTrend }}% from last week
+                        </p>
                     </div>
                     <div class="text-gray-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,7 +40,8 @@
                         <p class="text-sm text-teal-600 mb-1">Open Tickets</p>
                         <p class="text-3xl font-bold text-gray-800">{{ $openTickets }}</p>
                         <p class="text-xs {{ $openTicketsTrend >= 0 ? 'text-green-600' : 'text-red-600' }} mt-1">
-                            {{ $openTicketsTrend >= 0 ? '+' : '' }}{{ $openTicketsTrend }}% from yesterday</p>
+                            {{ $openTicketsTrend >= 0 ? '+' : '' }}{{ $openTicketsTrend }}% from yesterday
+                        </p>
                     </div>
                     <div class="text-gray-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +60,8 @@
                         <p class="text-sm text-gray-500 mb-1">Resolved Today</p>
                         <p class="text-3xl font-bold text-gray-800">{{ $resolvedToday }}</p>
                         <p class="text-xs {{ $resolvedTodayTrend >= 0 ? 'text-green-600' : 'text-red-600' }} mt-1">
-                            {{ $resolvedTodayTrend >= 0 ? '+' : '' }}{{ $resolvedTodayTrend }}% from yesterday</p>
+                            {{ $resolvedTodayTrend >= 0 ? '+' : '' }}{{ $resolvedTodayTrend }}% from yesterday
+                        </p>
                     </div>
                     <div class="text-gray-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +79,8 @@
                         <p class="text-sm text-gray-500 mb-1">Pending</p>
                         <p class="text-3xl font-bold text-gray-800">{{ $pendingTickets }}</p>
                         <p class="text-xs {{ $pendingTrend <= 0 ? 'text-green-600' : 'text-red-600' }} mt-1">
-                            {{ $pendingTrend >= 0 ? '+' : '' }}{{ $pendingTrend }}% from yesterday</p>
+                            {{ $pendingTrend >= 0 ? '+' : '' }}{{ $pendingTrend }}% from yesterday
+                        </p>
                     </div>
                     <div class="text-gray-400">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,7 +157,8 @@
                             <p class="text-sm text-gray-500 mb-1">SLA Breached</p>
                             <p class="text-3xl font-bold text-gray-800">{{ $slaBreached }}</p>
                             <p class="text-xs {{ $slaBreachedChange > 0 ? 'text-red-600' : 'text-green-600' }} mt-1">
-                                {{ $slaBreachedChange >= 0 ? '+' : '' }}{{ $slaBreachedChange }} from yesterday</p>
+                                {{ $slaBreachedChange >= 0 ? '+' : '' }}{{ $slaBreachedChange }} from yesterday
+                            </p>
                         </div>
                         <div class="text-gray-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

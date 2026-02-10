@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex h-[calc(100vh-80px)] overflow-hidden mt-20">
+    <div class="flex flex-col lg:flex-row lg:h-[calc(100vh-80px)] lg:overflow-hidden mt-20">
 
         <!-- MAIN CONTENT (LEFT SIDE — 3/4) -->
-        <main class="w-3/4 p-6 h-full overflow-y-auto">
+        <main class="w-full lg:w-3/4 p-4 sm:p-6 lg:h-full overflow-y-auto">
 
             <!-- PROFILE HEADER -->
             <div class="bg-white p-6 rounded-lg shadow border"
@@ -68,11 +68,11 @@
                                         </div>
 
                                         <input type="file" name="profile_picture" accept="image/*" @change="
-                                                                        const file = $event.target.files[0];
-                                                                        const reader = new FileReader();
-                                                                        reader.onload = (e) => { photoPreview = e.target.result };
-                                                                        reader.readAsDataURL(file);
-                                                                    "
+                                                                            const file = $event.target.files[0];
+                                                                            const reader = new FileReader();
+                                                                            reader.onload = (e) => { photoPreview = e.target.result };
+                                                                            reader.readAsDataURL(file);
+                                                                        "
                                             class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer">
                                     </div>
                                 </div>
@@ -199,11 +199,11 @@
                                             <td class="px-4 py-2">
                                                 <span
                                                     class="px-2 py-1 rounded-full text-xs font-semibold
-                                                                                                                                                {{ $ticket->status === 'Open' ? 'bg-green-100 text-green-800' : '' }}
-                                                                                                                                                {{ $ticket->status === 'In Progress' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                                                                                                                {{ $ticket->status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                                                                                                                {{ $ticket->status === 'Resolved' ? 'bg-gray-100 text-gray-800' : '' }}
-                                                                                                                                                {{ $ticket->status === 'Closed' ? 'bg-gray-200 text-gray-800' : '' }}">
+                                                                                                                                                        {{ $ticket->status === 'Open' ? 'bg-green-100 text-green-800' : '' }}
+                                                                                                                                                        {{ $ticket->status === 'In Progress' ? 'bg-blue-100 text-blue-800' : '' }}
+                                                                                                                                                        {{ $ticket->status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                                                                                                                        {{ $ticket->status === 'Resolved' ? 'bg-gray-100 text-gray-800' : '' }}
+                                                                                                                                                        {{ $ticket->status === 'Closed' ? 'bg-gray-200 text-gray-800' : '' }}">
                                                     {{ $ticket->status }}
                                                 </span>
                                             </td>
@@ -387,7 +387,8 @@
         </main>
 
         <!-- SIDEBAR (RIGHT SIDE — 1/4) -->
-        <aside class="w-1/4 bg-white border-l border-gray-200 p-4 h-full overflow-y-auto">
+        <aside
+            class="w-full lg:w-1/4 bg-white border-t lg:border-t-0 lg:border-l border-gray-200 p-4 lg:h-full overflow-y-auto">
             <h2 class="text-lg font-semibold mb-4">Activity</h2>
 
             <hr class="my-4">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="mt-20 px-10 mb-20 max-w-7xl mx-auto">
+    <div class="mt-20 px-4 sm:px-6 lg:px-10 mb-20 max-w-7xl mx-auto">
         {{-- ADD THIS BLOCK START --}}
         @if ($errors->any())
             <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
@@ -512,13 +512,13 @@
                     category.sub_categories.forEach(sub => {
                         const li = document.createElement('li');
                         li.innerHTML = `
-                                                                                                                                                            <button type="button" 
-                                                                                                                                                                class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
-                                                                                                                                                                data-id="${sub.subCategoryID || sub.id}"
-                                                                                                                                                                data-name="${sub.name}">
-                                                                                                                                                                ${sub.name}
-                                                                                                                                                            </button>
-                                                                                                                                                        `;
+                                                                                                                                                                <button type="button" 
+                                                                                                                                                                    class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
+                                                                                                                                                                    data-id="${sub.subCategoryID || sub.id}"
+                                                                                                                                                                    data-name="${sub.name}">
+                                                                                                                                                                    ${sub.name}
+                                                                                                                                                                </button>
+                                                                                                                                                            `;
                         subCategoryList.appendChild(li);
                     });
 

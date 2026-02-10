@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="flex flex-col md:flex-row w-full h-screen">
         <!-- Left Side: Login Form -->
-        <section class="w-full md:w-1/2 flex items-center justify-center px-8 py-10 bg-white">
+        <section class="w-full md:w-1/2 flex items-center justify-center px-4 sm:px-8 py-10 bg-white">
             <div class="w-full max-w-md space-y-6">
                 <!-- Logo + Title -->
                 <div class="flex items-center space-x-2 mb-4">

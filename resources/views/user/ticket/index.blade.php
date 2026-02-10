@@ -28,7 +28,7 @@
             /* gray-50 */
         }
     </style>
-    <div class="p-6 mt-20">
+    <div class="px-3 sm:px-4 lg:px-6 py-6 mt-20">
         @if (session('success'))
             <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
                 <strong>Success!</strong> {{ session('success') }}
@@ -103,21 +103,14 @@
         </div>
 
         <!-- Tickets Toolbar -->
-        <section class="sticky top-16 z-30 flex flex-wrap items-center justify-between px-6 py-3 bg-gray-100 border-b">
+        <section
+            class="sticky top-16 z-30 flex flex-wrap items-center justify-between gap-3 px-3 sm:px-6 py-3 bg-gray-100 border-b">
 
             <!-- Left side: Title + dropdown -->
             <div class="flex items-center space-x-4">
                 <h2 class="text-lg font-semibold text-gray-900 ">Tickets</h2>
 
-                <!-- Status dropdown -->
-                <button id="dropdownStatusButton" data-dropdown-toggle="dropdownStatus"
-                    class="text-sm text-gray-700 font-medium flex items-center hover:text-gray-900">
-                    {{ $filterLabel }}
-                    <svg class="w-3 h-3 ms-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
+
 
                 <!-- Dropdown menu -->
                 <div id="dropdownStatus"
@@ -136,7 +129,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center space-x-4 ml-auto justify-end">
+            <div class="flex flex-wrap items-center gap-3 sm:gap-4 ml-auto justify-end">
 
                 <!-- Filter button -->
                 <button id="dropdownFilterButton" data-dropdown-toggle="dropdownFilter"
@@ -160,9 +153,9 @@
                 </span>
 
                 <!-- Search -->
-                <form class="relative">
+                <form class="relative w-full sm:w-auto">
                     <input type="text"
-                        class="block w-64 p-2 ps-3 text-sm border border-gray-300 rounded-md bg-white focus:ring-teal-500 focus:border-teal-500"
+                        class="block w-full sm:w-64 p-2 ps-3 text-sm border border-gray-300 rounded-md bg-white focus:ring-teal-500 focus:border-teal-500"
                         placeholder="Search">
                     <button type="submit" class="absolute right-2.5 top-2.5 text-gray-500">
                         <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"
@@ -175,7 +168,8 @@
             </div>
 
             <!-- FILTER DROPDOWN -->
-            <div id="dropdownFilter" class="z-50 hidden w-96 rounded-lg border border-gray-200 bg-white shadow-lg">
+            <div id="dropdownFilter"
+                class="z-50 hidden w-[calc(100vw-2rem)] sm:w-96 rounded-lg border border-gray-200 bg-white shadow-lg">
 
                 <!-- Selected filters -->
                 <div class="border-b p-4">
@@ -259,7 +253,7 @@
                     <!-- Assignee -->
                     <h2>
                         <button type="button"
-                            class="flex w-full items-center justify-between py-2 text-sm font-medium text-gray-700"
+                            class="flex w-full items-center justify-between py-2 px-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 focus:bg-gray-50 transition-colors"
                             data-accordion-target="#filter-3">
                             Assignee
                             <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -268,13 +262,17 @@
                         </button>
                     </h2>
 
-                    <div id="filter-3" class="hidden pb-3">
-                        <label class="flex items-center gap-2 text-sm">
-                            <input type="checkbox" class="filter-checkbox" data-group="Assignee" data-value="Me">
+                    <div id="filter-3" class="hidden pb-3 px-2">
+                        <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                            <input type="checkbox"
+                                class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:border-transparent"
+                                data-group="Assignee" data-value="Me">
                             Me
                         </label>
-                        <label class="flex items-center gap-2 text-sm">
-                            <input type="checkbox" class="filter-checkbox" data-group="Assignee" data-value="Unassigned">
+                        <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
+                            <input type="checkbox"
+                                class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:border-transparent"
+                                data-group="Assignee" data-value="Unassigned">
                             Unassigned
                         </label>
                     </div>
@@ -335,8 +333,51 @@
                                     {{ $ticket->priority }}
                                 </span>
                             </td>
-                            <td class="px-4 py-2 text-gray-500">
-                                {{ $ticket->created_at ? $ticket->created_at->diffForHumans(null, true) : 'N/A' }}
+                            <td class="px-4 py-2">
+                                @php
+                                    $isCompleted = in_array($ticket->status, ['Resolved', 'Closed', 'Cancelled']);
+                                    $responseDue = $ticket->response_due;
+                                @endphp
+
+                                @if($isCompleted)
+                                    <span class="text-gray-400 text-xs">Completed</span>
+                                @elseif($responseDue)
+                                    @php
+                                        $now = now();
+                                        $remainingMinutes = (int) $now->diffInMinutes($responseDue, false);
+                                        $totalMinutes = $ticket->sla->response_time_minutes ?? 1;
+
+                                        if ($remainingMinutes <= 0) {
+                                            $countdownColor = 'text-red-600 font-bold';
+                                            $displayText = '0 minutes';
+                                        } elseif ($remainingMinutes <= ($totalMinutes * 0.25)) {
+                                            $countdownColor = 'text-orange-600 font-semibold';
+                                            if ($remainingMinutes >= 60) {
+                                                $hours = floor($remainingMinutes / 60);
+                                                $mins = $remainingMinutes % 60;
+                                                $displayText = $hours . 'h ' . $mins . 'm';
+                                            } else {
+                                                $displayText = $remainingMinutes . ' minutes';
+                                            }
+                                        } else {
+                                            $countdownColor = 'text-green-600 font-medium';
+                                            if ($remainingMinutes >= 60) {
+                                                $hours = floor($remainingMinutes / 60);
+                                                $mins = $remainingMinutes % 60;
+                                                $displayText = $hours . 'h ' . $mins . 'm';
+                                            } else {
+                                                $displayText = $remainingMinutes . ' minutes';
+                                            }
+                                        }
+                                    @endphp
+                                    <span class="countdown-timer {{ $countdownColor }}"
+                                        data-response-due="{{ $responseDue->toIso8601String() }}"
+                                        data-total-minutes="{{ $totalMinutes }}">
+                                        {{ $displayText }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-400 text-xs">N/A</span>
+                                @endif
                             </td>
                             <td class="px-4 py-2">
                                 @if($ticket->user)
@@ -430,9 +471,9 @@
                             chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
 
                             chip.innerHTML = `
-                                        ${cb.dataset.group}: ${cb.dataset.value}
-                                        <button class="ml-1 text-gray-500">&times;</button>
-                                    `;
+                                                    ${cb.dataset.group}: ${cb.dataset.value}
+                                                    <button class="ml-1 text-gray-500">&times;</button>
+                                                `;
 
                             chip.querySelector('button').onclick = () => {
                                 cb.checked = false;
@@ -484,6 +525,50 @@
 
                     window.location.href = `${window.location.pathname}?${params.toString()}`;
                 };
+
+                // LIVE COUNTDOWN TIMER for Estimated Waiting Time
+                function updateCountdowns() {
+                    const timers = document.querySelectorAll('.countdown-timer');
+                    const now = new Date();
+
+                    timers.forEach(timer => {
+                        const responseDue = new Date(timer.dataset.responseDue);
+                        const totalMinutes = parseInt(timer.dataset.totalMinutes) || 1;
+                        const diffMs = responseDue - now;
+                        const remainingMinutes = Math.max(0, Math.floor(diffMs / 60000));
+
+                        // Update display text
+                        let displayText;
+                        if (remainingMinutes <= 0) {
+                            displayText = '0 minutes';
+                        } else if (remainingMinutes >= 60) {
+                            const hours = Math.floor(remainingMinutes / 60);
+                            const mins = remainingMinutes % 60;
+                            displayText = hours + 'h ' + mins + 'm';
+                        } else {
+                            displayText = remainingMinutes + ' minutes';
+                        }
+                        timer.textContent = displayText;
+
+                        // Update color classes
+                        timer.classList.remove(
+                            'text-red-600', 'font-bold',
+                            'text-orange-600', 'font-semibold',
+                            'text-green-600', 'font-medium'
+                        );
+
+                        if (remainingMinutes <= 0) {
+                            timer.classList.add('text-red-600', 'font-bold');
+                        } else if (remainingMinutes <= (totalMinutes * 0.25)) {
+                            timer.classList.add('text-orange-600', 'font-semibold');
+                        } else {
+                            timer.classList.add('text-green-600', 'font-medium');
+                        }
+                    });
+                }
+
+                // Update every 60 seconds
+                setInterval(updateCountdowns, 60000);
             });
         </script>
 @endsection

@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Ticket::where('userID', auth()->id())->with(['user', 'assignee']);
+        $query = Ticket::where('userID', auth()->id())->with(['user', 'assignee', 'sla']);
 
         // --- QUEUE POSITION LOGIC ---
         // 1. Find User's Top Priority Ticket (Open/In Progress)
