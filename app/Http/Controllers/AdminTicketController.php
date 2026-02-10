@@ -34,6 +34,9 @@ class AdminTicketController extends Controller
             'description' => 'required|string',
             'assignee_id' => 'nullable|exists:users,userID',
             'attachment' => 'nullable|file|max:10240',
+            'impact_level' => 'nullable|string|in:High,Medium,Low',
+            'urgency' => 'nullable|string|in:High,Medium,Low',
+            'priority' => 'nullable|string|in:Critical,High,Medium,Low',
         ]);
 
         DB::beginTransaction();
@@ -66,6 +69,39 @@ class AdminTicketController extends Controller
 
                 $changes[] = "Assignee changed from {$oldAssignee} to {$newAssignee}";
                 $ticket->assigneeID = $request->assignee_id;
+            }
+
+            // Handle Incident-specific fields (Impact & Urgency -> Auto-calculate Priority)
+            if ($ticket->type === 'incident') {
+                if ($request->has('impact_level') && $ticket->impact_level !== $request->impact_level) {
+                    $changes[] = "Impact changed from {$ticket->impact_level} to {$request->impact_level}";
+                    $ticket->impact_level = $request->impact_level;
+                }
+
+                if ($request->has('urgency') && $ticket->urgency !== $request->urgency) {
+                    $changes[] = "Urgency changed from {$ticket->urgency} to {$request->urgency}";
+                    $ticket->urgency = $request->urgency;
+                }
+
+                // Auto-calculate Priority from Impact and Urgency
+                $priorityMatrix = [
+                    'High' => ['High' => 'Critical', 'Medium' => 'High', 'Low' => 'Medium'],
+                    'Medium' => ['High' => 'High', 'Medium' => 'Medium', 'Low' => 'Low'],
+                    'Low' => ['High' => 'Medium', 'Medium' => 'Low', 'Low' => 'Low'],
+                ];
+                $newPriority = $priorityMatrix[$ticket->impact_level][$ticket->urgency] ?? 'Low';
+                if ($ticket->priority !== $newPriority) {
+                    $changes[] = "Priority auto-calculated from {$ticket->priority} to {$newPriority}";
+                    $ticket->priority = $newPriority;
+                }
+            }
+
+            // Handle Service Request-specific field (Direct Priority)
+            if ($ticket->type === 'service_request' && $request->has('priority')) {
+                if ($ticket->priority !== $request->priority) {
+                    $changes[] = "Priority changed from {$ticket->priority} to {$request->priority}";
+                    $ticket->priority = $request->priority;
+                }
             }
 
             $ticket->save();
@@ -198,6 +234,7 @@ class AdminTicketController extends Controller
             // Delete all attachments and their files
             $attachments = Attachment::where('ticketID', $id)->get();
             foreach ($attachments as $attachment) {
+                /** @var Attachment $attachment */
                 if (Storage::disk('public')->exists($attachment->file_path)) {
                     Storage::disk('public')->delete($attachment->file_path);
                 }
@@ -245,6 +282,7 @@ class AdminTicketController extends Controller
                     // Delete all attachments and their files
                     $attachments = Attachment::where('ticketID', $ticketId)->get();
                     foreach ($attachments as $attachment) {
+                        /** @var Attachment $attachment */
                         if (Storage::disk('public')->exists($attachment->file_path)) {
                             Storage::disk('public')->delete($attachment->file_path);
                         }

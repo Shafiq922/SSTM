@@ -25,6 +25,57 @@
                                 @endphp
                                 <span
                                     class="px-2.5 py-0.5 text-xs font-semibold {{ $pColor }} rounded-full">{{ $ticket->priority }}</span>
+
+                                {{-- SLA Info Tooltip --}}
+                                <div class="relative group inline-block">
+                                    <svg class="w-4 h-4 text-gray-400 cursor-help" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{-- Tooltip Content --}}
+                                    <div
+                                        class="absolute left-0 top-6 hidden group-hover:block z-50 w-80 bg-white text-gray-800 text-xs rounded-lg shadow-2xl border-2 border-blue-500 p-4">
+                                        <div class="font-semibold mb-2 text-sm text-blue-600">SLA Response & Resolution
+                                            Times</div>
+                                        <table class="w-full text-left">
+                                            <thead>
+                                                <tr class="border-b border-blue-200">
+                                                    <th class="pb-2 font-medium">Priority</th>
+                                                    <th class="pb-2 font-medium text-center">Response Time</th>
+                                                    <th class="pb-2 font-medium text-center">Resolution Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="text-xs">
+                                                <tr class="border-b border-gray-200">
+                                                    <td class="py-2">Critical</td>
+                                                    <td class="py-2 text-center">30 minutes</td>
+                                                    <td class="py-2 text-center">4 hours</td>
+                                                </tr>
+                                                <tr class="border-b border-gray-200">
+                                                    <td class="py-2">High</td>
+                                                    <td class="py-2 text-center">1 hour</td>
+                                                    <td class="py-2 text-center">8 hours</td>
+                                                </tr>
+                                                <tr class="border-b border-gray-200">
+                                                    <td class="py-2">Medium</td>
+                                                    <td class="py-2 text-center">4 hours</td>
+                                                    <td class="py-2 text-center">2 days</td>
+                                                </tr>
+                                                <tr class="border-b border-gray-200">
+                                                    <td class="py-2">Low</td>
+                                                    <td class="py-2 text-center">8 hours</td>
+                                                    <td class="py-2 text-center">3 days</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="py-2">Planning</td>
+                                                    <td class="py-2 text-center">1 day</td>
+                                                    <td class="py-2 text-center">5 days</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                             <button type="submit"
                                 class="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm">
@@ -109,6 +160,47 @@
                             <span
                                 class="text-gray-900 font-medium">{{ $ticket->updated_at->format('m/d/Y h:i:s A') }}</span>
                         </div>
+
+                        {{-- Conditional Editing: Impact & Urgency for Incidents --}}
+                        @if($ticket->type === 'incident')
+                            <div class="grid grid-cols-2 gap-4 items-center">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500">Impact:</span>
+                                    <select name="impact_level"
+                                        class="text-sm border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50 py-1">
+                                        <option value="High" {{ $ticket->impact_level == 'High' ? 'selected' : '' }}>High</option>
+                                        <option value="Medium" {{ $ticket->impact_level == 'Medium' ? 'selected' : '' }}>Medium
+                                        </option>
+                                        <option value="Low" {{ $ticket->impact_level == 'Low' ? 'selected' : '' }}>Low</option>
+                                    </select>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500">Urgency:</span>
+                                    <select name="urgency"
+                                        class="text-sm border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50 py-1">
+                                        <option value="High" {{ $ticket->urgency == 'High' ? 'selected' : '' }}>High</option>
+                                        <option value="Medium" {{ $ticket->urgency == 'Medium' ? 'selected' : '' }}>Medium
+                                        </option>
+                                        <option value="Low" {{ $ticket->urgency == 'Low' ? 'selected' : '' }}>Low</option>
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Conditional Editing: Priority for Service Requests --}}
+                        @if($ticket->type === 'service_request')
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500">Priority:</span>
+                                <select name="priority"
+                                    class="text-sm border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50 py-1">
+                                    <option value="Critical" {{ $ticket->priority == 'Critical' ? 'selected' : '' }}>Critical
+                                    </option>
+                                    <option value="High" {{ $ticket->priority == 'High' ? 'selected' : '' }}>High</option>
+                                    <option value="Medium" {{ $ticket->priority == 'Medium' ? 'selected' : '' }}>Medium</option>
+                                    <option value="Low" {{ $ticket->priority == 'Low' ? 'selected' : '' }}>Low</option>
+                                </select>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Progress Bar (SLA-Based) -->

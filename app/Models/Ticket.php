@@ -49,7 +49,7 @@ class Ticket extends Model
 
     public function sla()
     {
-        return $this->belongsTo(Sla::class, 'slaID');
+        return $this->belongsTo(Sla::class, 'slaID', 'slaID');
     }
 
     public function category()
@@ -82,14 +82,14 @@ class Ticket extends Model
     {
         if (!$this->sla || !$this->created_at)
             return null;
-        return $this->created_at->addMinutes($this->sla->response_time_minutes);
+        return $this->created_at->copy()->addMinutes($this->sla->response_time_minutes);
     }
 
     public function getResolutionDueAttribute()
     {
         if (!$this->sla || !$this->created_at)
             return null;
-        return $this->created_at->addMinutes($this->sla->resolution_time_minutes);
+        return $this->created_at->copy()->addMinutes($this->sla->resolution_time_minutes);
     }
 }
 

@@ -11,22 +11,45 @@ class UserProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
+        return $this->renderProfile($user, true); // True = is owner
+    }
+
+    public function viewProfile($id)
+    {
+        if ($id == Auth::id()) {
+            return redirect()->route('user.profile.show');
+        }
+
+        $user = \App\Models\User::with('department')->findOrFail($id);
+        return $this->renderProfile($user, false); // False = public view
+    }
+
+    private function renderProfile($user, $isOwner)
+    {
         $itStaff = \App\Models\User::whereHas('role', function ($q) {
             $q->where('name', 'IT Staff');
         })->get();
 
         $ratingsGiven = $user->ratingsGiven()->with('ratee')->latest()->get();
+        // For public profile of IT Staff, we might want to show ratings RECEIVED
+        $ratingsReceived = $user->ratingsReceived()->with('rater')->latest()->get();
 
-        // Conditional Ticket Fetching
-        if ($user->role->name === 'IT Staff' || $user->role->name === 'System Administrator') {
-            $tickets = $user->assignedTickets()->with('user')->latest()->paginate(10); // Show Requester
-        } else {
-            $tickets = $user->tickets()->with('assignee')->latest()->paginate(10); // Show Assignee
+        // Tickets & Activities (Only for Owner or Admin viewing)
+        $tickets = null;
+        $activities = collect();
+
+        if ($isOwner || Auth::user()->role->name === 'System Administrator') {
+            // Conditional Ticket Fetching
+            if ($user->role->name === 'IT Staff' || $user->role->name === 'System Administrator') {
+                $tickets = $user->assignedTickets()->with('user')->latest()->paginate(10); // Show Requester
+            } else {
+                $tickets = $user->tickets()->with('assignee')->latest()->paginate(10); // Show Assignee
+            }
+            $activities = $user->ticketLogs()->with('ticket')->latest()->take(20)->get();
         }
 
-        $activities = $user->ticketLogs()->with('ticket')->latest()->take(20)->get();
-
-        return view('user.profile', compact('user', 'itStaff', 'ratingsGiven', 'tickets', 'activities'));
+        $view = $isOwner ? 'user.profile' : 'user.public-profile';
+        return view($view, compact('user', 'itStaff', 'ratingsGiven', 'ratingsReceived', 'tickets', 'activities', 'isOwner'));
     }
 
     public function update(Request $request)

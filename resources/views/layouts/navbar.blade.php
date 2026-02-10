@@ -30,7 +30,9 @@
                         <a href="{{ route('dashboard') }}" class="block py-2 px-3 hover:underline">Dashboard</a>
                     @endif
                 </li>
-                <li><a href="{{ route('admin.analytics') }}" class="block py-2 px-3 hover:underline">Analytics</a></li>
+                @if(auth()->user()->role && in_array(auth()->user()->role->name, ['IT Staff', 'System Administrator']))
+                    <li><a href="{{ route('admin.analytics') }}" class="block py-2 px-3 hover:underline">Analytics</a></li>
+                @endif
                 <!-- More Dropdown -->
                 <li>
                     <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"

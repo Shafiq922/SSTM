@@ -42,6 +42,18 @@
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
+                    <!-- Phone Number -->
+                    <div>
+                        <x-input-label for="user_phone" :value="__('Phone Number')" />
+                        <div class="relative mt-1">
+                            <x-text-input id="user_phone"
+                                class="block w-full px-3 py-2 !bg-gray-100 !border-gray-300 !text-gray-900 text-sm rounded-md focus:!ring-teal-500 focus:!border-teal-500"
+                                type="text" name="user_phone" :value="old('user_phone')" required
+                                placeholder="Enter your phone number" autocomplete="tel" />
+                        </div>
+                        <x-input-error :messages="$errors->get('user_phone')" class="mt-2" />
+                    </div>
+
                     <!-- Password -->
                     <div>
                         <x-input-label for="password" :value="__('Password')" />

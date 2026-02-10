@@ -39,6 +39,69 @@
                 <strong>Error:</strong> {{ session('error') }}
             </div>
         @endif
+
+        <!-- Top Stats Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full">
+            <!-- Active IT Staff -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start z-10 relative">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Active IT Staff</p>
+                        <h3 class="text-3xl font-bold text-gray-900">{{ $activeITStaff }}</h3>
+                    </div>
+                    <div class="p-2 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                </div>
+            </div>
+
+            <!-- Position in Queue -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start z-10 relative">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Your Position in Queue</p>
+                        <h3 class="text-3xl font-bold text-gray-900">
+                            {{ $positionInQueue > 0 ? '#' . $positionInQueue : '-' }}
+                        </h3>
+                    </div>
+                    <div class="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                    </div>
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                </div>
+            </div>
+
+            <!-- Total Tickets in Queue -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group">
+                <div class="flex justify-between items-start z-10 relative">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Total Tickets in Queue</p>
+                        <h3 class="text-3xl font-bold text-gray-900">{{ $totalTicketsInQueue }}</h3>
+                    </div>
+                    <div class="p-2 bg-orange-50 rounded-lg group-hover:bg-orange-100 transition-colors">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-orange-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500">
+                </div>
+            </div>
+        </div>
+
         <!-- Tickets Toolbar -->
         <section class="sticky top-16 z-30 flex flex-wrap items-center justify-between px-6 py-3 bg-gray-100 border-b">
 
@@ -170,25 +233,25 @@
                         <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                             <input type="checkbox"
                                 class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:border-transparent"
-                                data-group="Department" data-value="Human Resource (HR)">
+                                data-group="Department" data-value="HR">
                             Human Resource (HR)
                         </label>
                         <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                             <input type="checkbox"
                                 class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:border-transparent"
-                                data-group="Department" data-value="Finance (FIN)">
+                                data-group="Department" data-value="Finance">
                             Finance (FIN)
                         </label>
                         <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                             <input type="checkbox"
                                 class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:border-transparent"
-                                data-group="Department" data-value="Supply Chain (SUPP)">
+                                data-group="Department" data-value="Supply Chain">
                             Supply Chain (SUPP)
                         </label>
                         <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                             <input type="checkbox"
                                 class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:border-transparent"
-                                data-group="Department" data-value="Procurement (PROC)">
+                                data-group="Department" data-value="Procurement">
                             Procurement (PROC)
                         </label>
                     </div>
@@ -267,15 +330,34 @@
                                         default => 'bg-gray-100 text-gray-800',
                                     };
                                 @endphp
-                                <span class="{{ $priorityClasses }} w-20 inline-flex justify-center text-xs font-medium px-2.5 py-0.5 rounded">
+                                <span
+                                    class="{{ $priorityClasses }} w-20 inline-flex justify-center text-xs font-medium px-2.5 py-0.5 rounded">
                                     {{ $ticket->priority }}
                                 </span>
                             </td>
                             <td class="px-4 py-2 text-gray-500">
                                 {{ $ticket->created_at ? $ticket->created_at->diffForHumans(null, true) : 'N/A' }}
                             </td>
-                            <td class="px-4 py-2">{{ $ticket->user->name ?? 'Unknown' }}</td>
-                            <td class="px-4 py-2">{{ $ticket->assignee->name ?? 'Unassigned' }}</td>
+                            <td class="px-4 py-2">
+                                @if($ticket->user)
+                                    <a href="{{ route('user.profile.view', $ticket->user->userID) }}"
+                                        class="text-teal-600 hover:underline">
+                                        {{ $ticket->user->name }}
+                                    </a>
+                                @else
+                                    Unknown
+                                @endif
+                            </td>
+                            <td class="px-4 py-2">
+                                @if($ticket->assignee)
+                                    <a href="{{ route('user.profile.view', $ticket->assignee->userID) }}"
+                                        class="text-teal-600 hover:underline">
+                                        {{ $ticket->assignee->name }}
+                                    </a>
+                                @else
+                                    Unassigned
+                                @endif
+                            </td>
                             <td class="px-4 py-2">{{ Str::limit($ticket->summary, 50) }}</td>
                             <td class="px-4 py-2">
                                 @php
@@ -304,55 +386,104 @@
             </table>
         </div>
         <script>
-            <script>
+            document.addEventListener('DOMContentLoaded', () => {
 
-                                                                //FILTER LOGIC
+                //FILTER LOGIC
 
                 const checkboxes = document.querySelectorAll('.filter-checkbox');
                 const selectedFilters = document.getElementById('selectedFilters');
                 const selectedCount = document.getElementById('selectedCount');
 
+                // 1. Pre-check based on URL Params
+                const urlParams = new URLSearchParams(window.location.search);
+                checkboxes.forEach(cb => {
+                    const group = cb.dataset.group;
+                    const value = cb.dataset.value;
+                    let paramName = '';
+
+                    if (group === 'All Tickets') paramName = 'status[]';
+                    else if (group === 'Department') paramName = 'department[]';
+                    else if (group === 'Assignee') paramName = 'assignee[]';
+
+                    // Check exact matches or "Open/Closed Tickets" mapping
+                    if (urlParams.getAll(paramName).includes(value)) {
+                        cb.checked = true;
+                    }
+                    // Special handling for "Open Tickets" value vs "Open" param
+                    if (group === 'All Tickets') {
+                        let status = value.replace(' Tickets', '');
+                        if (urlParams.getAll('status[]').includes(status)) {
+                            cb.checked = true;
+                        }
+                    }
+                });
+                updateFilters();
+
                 function updateFilters() {
                     selectedFilters.innerHTML = '';
-                let count = 0;
+                    let count = 0;
 
-                                                                    checkboxes.forEach(cb => {
-                                                                        if (cb.checked) {
-                    count++;
-                const chip = document.createElement('span');
-                chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) {
+                            count++;
+                            const chip = document.createElement('span');
+                            chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
 
-                chip.innerHTML = `
-                ${cb.dataset.group}: ${cb.dataset.value}
-                <button class="ml-1 text-gray-500">&times;</button>
-                `;
+                            chip.innerHTML = `
+                                        ${cb.dataset.group}: ${cb.dataset.value}
+                                        <button class="ml-1 text-gray-500">&times;</button>
+                                    `;
 
-                                                                            chip.querySelector('button').onclick = () => {
-                    cb.checked = false;
-                updateFilters();
-                                                                            };
+                            chip.querySelector('button').onclick = () => {
+                                cb.checked = false;
+                                updateFilters();
+                            };
 
-                selectedFilters.appendChild(chip);
-                                                                        }
-                                                                    });
+                            selectedFilters.appendChild(chip);
+                        }
+                    });
 
-                selectedCount.textContent = `${count} of 20 selected`;
-                                                                }
+                    if (selectedCount) selectedCount.textContent = `${count} of 20 selected`;
+                }
 
-                                                                checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
+                checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
 
-                                                                document.getElementById('resetFilters').onclick = () => {
+                document.getElementById('resetFilters').onclick = () => {
                     checkboxes.forEach(cb => cb.checked = false);
-                updateFilters();
-                                                                };
+                    updateFilters();
+                    window.location.href = window.location.pathname;
+                };
 
-                                                                document.getElementById('clearFilters').onclick = () => {
-                    checkboxes.forEach(cb => cb.checked = false);
-                updateFilters();
-                                                                };
+                // Remove clearFilters if it exists, or handle it if it is the same as reset
+                const clearBtn = document.getElementById('clearFilters');
+                if (clearBtn) {
+                    clearBtn.onclick = () => {
+                        checkboxes.forEach(cb => cb.checked = false);
+                        updateFilters();
+                    };
+                }
 
-                                                                document.getElementById('applyFilters').onclick = () => {
-                    console.log('Filters applied');
-                                                                };
+                document.getElementById('applyFilters').onclick = () => {
+                    const params = new URLSearchParams();
+
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) {
+                            const group = cb.dataset.group;
+                            const value = cb.dataset.value;
+
+                            if (group === 'All Tickets') {
+                                let status = value.replace(' Tickets', '');
+                                params.append('status[]', status);
+                            } else if (group === 'Department') {
+                                params.append('department[]', value);
+                            } else if (group === 'Assignee') {
+                                params.append('assignee[]', value);
+                            }
+                        }
+                    });
+
+                    window.location.href = `${window.location.pathname}?${params.toString()}`;
+                };
+            });
         </script>
 @endsection

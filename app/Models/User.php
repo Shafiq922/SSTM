@@ -92,6 +92,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(ServiceRating::class, 'ratee_userID');
     }
+
+    /**
+     * Check if the user is available for assignment (M/M/C Queueing).
+     * Returns true if the user has NO active assigned tickets.
+     */
+    public function getIsAvailableAttribute()
+    {
+        // Active statuses: Open, In Progress, Pending, Breached
+        // Inactive statuses: Resolved, Closed, Cancelled
+        return $this->assignedTickets()
+            ->whereNotIn('status', ['Resolved', 'Closed', 'Cancelled'])
+            ->doesntExist();
+    }
 }
 
 

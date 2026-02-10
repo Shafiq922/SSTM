@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
+
+
 
 
 /* page redirect view */
@@ -43,10 +45,13 @@ Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
 
     // Ticket Actions
     Route::post('ticket/note/{id}', [\App\Http\Controllers\UserTicketController::class, 'storeNote'])->name('ticket.note');
+    Route::put('ticket/update/{id}', [\App\Http\Controllers\UserTicketController::class, 'update'])->name('ticket.update');
+    Route::delete('ticket/attachment/{id}', [\App\Http\Controllers\UserTicketController::class, 'deleteAttachment'])->name('ticket.attachment.delete');
 });
 //user profile
 Route::prefix('user')->name('user.')->middleware(['auth'])->group(function () {
     Route::get('profile', [UserProfileController::class, 'show'])->name('profile.show');
+    Route::get('profile/view/{id}', [UserProfileController::class, 'viewProfile'])->name('profile.view');
     Route::post('profile', [UserProfileController::class, 'update'])->name('profile.update');
     Route::post('profile/rating', [UserProfileController::class, 'storeRating'])->name('profile.rating.store');
 });
@@ -88,9 +93,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
             ? round($avgWaitMinutes / 60, 1) . ' hours'
             : round($avgWaitMinutes) . ' mins';
 
-        // C: Number of active IT staff (not affected by priority filter)
+        // C: Number of active IT staff (Available - No active tickets)
         $activeITStaff = \App\Models\User::whereHas('role', function ($q) {
             $q->where('name', 'IT Staff');
+        })->whereDoesntHave('assignedTickets', function ($q) {
+            $q->whereNotIn('status', ['Resolved', 'Closed', 'Cancelled']);
         })->count();
 
         // Tickets nearing SLA breach (Active tickets older than 24h - placeholder logic)
@@ -101,14 +108,89 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
 
         // --- 2. Filtering & Data Fetching ---
-        $query = \App\Models\Ticket::with(['user', 'assignee'])->latest();
+        $query = \App\Models\Ticket::with(['user', 'assignee']);
 
+        // Custom Sorting
+        // 1. Status: Active (Open, In Progress, Pending) > Inactive (Resolved, Closed, Cancelled)
+        $query->orderByRaw("
+            CASE 
+                WHEN status IN ('Resolved', 'Closed', 'Cancelled') THEN 2 
+                ELSE 1 
+            END ASC
+        ");
+
+        // 2. Priority: Critical > High > Medium > Low
+        $query->orderByRaw("
+            CASE 
+                WHEN priority = 'Critical' THEN 1 
+                WHEN priority = 'High' THEN 2 
+                WHEN priority = 'Medium' THEN 3 
+                WHEN priority = 'Low' THEN 4 
+                ELSE 5 
+            END ASC
+        ");
+
+        // 3. Date: Oldest First
+        $query->orderBy('created_at', 'asc');
+
+        // Status Filter
+        if ($request->has('status')) {
+            $query->whereIn('status', $request->input('status'));
+        }
+
+        // Department Filter (Based on Ticket Summary Prefix)
+        if ($request->has('department')) {
+            $departments = $request->input('department');
+
+            // Map full names to prefixes
+            $prefixMap = [
+                'HR' => 'HR',
+                'Finance' => 'FIN',
+                'Supply Chain' => 'SUPP',
+                'Procurement' => 'PROC'
+            ];
+
+            $query->where(function ($q) use ($departments, $prefixMap) {
+                foreach ($departments as $dept) {
+                    if (isset($prefixMap[$dept])) {
+                        $prefix = $prefixMap[$dept];
+                        $q->orWhere('summary', 'LIKE', "$prefix%");
+                    }
+                }
+            });
+        }
+
+        // Assignee Filter
+        if ($request->has('assignee')) {
+            $assignees = $request->input('assignee');
+            $query->where(function ($q) use ($assignees) {
+                if (in_array('Me', $assignees)) {
+                    $q->orWhere('assigneeID', auth()->id());
+                }
+                if (in_array('Unassigned', $assignees)) {
+                    $q->orWhereNull('assigneeID');
+                }
+            });
+        }
+
+        // Priority Filter (Existing)
         if ($request->has('priority')) {
             $query->where('priority', $request->query('priority'));
-            $filterLabel = 'Filtered: ' . $request->query('priority');
-        } else {
-            $filterLabel = 'All tickets (Admin View)';
         }
+
+        $filterLabel = 'Filtered Tickets';
+
+        // DEBUG: Check SQL & Data
+        // \Illuminate\Support\Facades\Log::info('Admin Ticket Query: ' . $query->toSql());
+        // \Illuminate\Support\Facades\Log::info('Bindings: ' . json_encode($query->getBindings()));
+        /*
+        dd([
+            'priorities' => \App\Models\Ticket::distinct()->pluck('priority'),
+            'statuses' => \App\Models\Ticket::distinct()->pluck('status'),
+            'sql' => $query->toSql(),
+            'bindings' => $query->getBindings()
+        ]);
+        */
 
         $tickets = $query->get();
 
@@ -168,5 +250,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
 
 require __DIR__ . '/auth.php';

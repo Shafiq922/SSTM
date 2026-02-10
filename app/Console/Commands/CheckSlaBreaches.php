@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Ticket;
 use App\Models\TicketLog;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class CheckSlaBreaches extends Command
 {
@@ -27,7 +28,8 @@ class CheckSlaBreaches extends Command
      */
     public function handle()
     {
-        $now = now();
+        $this->info('Starting SLA Check...');
+        Log::info('SLA Check Started at ' . now());
         $updatedCount = 0;
 
         // Get all active tickets (not resolved, closed, cancelled, or already breached)
@@ -35,7 +37,11 @@ class CheckSlaBreaches extends Command
             ->whereNotIn('status', ['Resolved', 'Closed', 'Cancelled', 'Breached'])
             ->get();
 
+        Log::info('SLA Check: Found ' . $tickets->count() . ' active tickets.');
+        $this->info('SLA Check: Found ' . $tickets->count() . ' active tickets.');
+
         foreach ($tickets as $ticket) {
+            /** @var Ticket $ticket */
             $statusChanged = false;
             $oldStatus = $ticket->status;
 
@@ -43,8 +49,19 @@ class CheckSlaBreaches extends Command
             if ($ticket->status === 'Open' && $ticket->response_due && $ticket->response_due->isPast()) {
                 $ticket->status = 'In Progress';
                 $statusChanged = true;
-                $this->info("Ticket #{$ticket->ticket_number}: Response time exceeded, changed to In Progress");
+                Log::info("Ticket #{$ticket->ticket_number}: Response time exceeded, changed to In Progress");
             }
+
+            // Debugging Output
+            $resDue = $ticket->resolution_due;
+            $isPast = $resDue ? ($resDue->isPast() ? 'YES' : 'NO') : 'N/A';
+            $now = now();
+            $this->info("Checking Ticket #{$ticket->ticket_number} (Status: {$ticket->status})");
+            $this->info(" - SLA ID: " . ($ticket->slaID ?? 'None'));
+            $this->info(" - Created At: " . $ticket->created_at);
+            $this->info(" - Resolution Due: " . ($resDue ?? 'None'));
+            $this->info(" - Now: $now");
+            $this->info(" - Is Past?: $isPast");
 
             // Check Resolution Time Breach (for non-resolved tickets)
             if (
@@ -54,7 +71,8 @@ class CheckSlaBreaches extends Command
             ) {
                 $ticket->status = 'Breached';
                 $statusChanged = true;
-                $this->warn("Ticket #{$ticket->ticket_number}: Resolution time exceeded, marked as Breached");
+                Log::warning("Ticket #{$ticket->ticket_number}: Resolution time exceeded, marked as Breached");
+                $this->error(" -> MARKED AS BREACHED");
             }
 
             if ($statusChanged) {

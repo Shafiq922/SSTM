@@ -76,7 +76,7 @@
                         </span>
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Critical']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                    {{ request('priority') == 'Critical'
+                                                                                                            {{ request('priority') == 'Critical'
         ? 'bg-red-100 text-red-800 border-red-300 ring-2 ring-red-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200' }}">
                             Critical
@@ -84,7 +84,7 @@
 
                         <a href="{{ route('admin.tickets', ['priority' => 'High']) }}"
                             class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                    {{ request('priority') == 'High'
+                                                                                                            {{ request('priority') == 'High'
         ? 'bg-orange-100 text-orange-800 border-orange-300 ring-2 ring-orange-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200' }}">
                             High
@@ -92,14 +92,14 @@
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Medium']) }}"
                             class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                    {{ request('priority') == 'Medium'
+                                                                                                            {{ request('priority') == 'Medium'
         ? 'bg-yellow-100 text-yellow-800 border-yellow-300 ring-2 ring-yellow-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200' }}">
                             Medium
                         </a>
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Low']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                    {{ request('priority') == 'Low'
+                                                                                                            {{ request('priority') == 'Low'
         ? 'bg-green-100 text-green-800 border-green-300 ring-2 ring-green-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200' }}">
                             Low
@@ -231,25 +231,25 @@
                             <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                                 <input type="checkbox"
                                     class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:!border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:!border-transparent"
-                                    data-group="Department" data-value="Human Resource (HR)">
+                                    data-group="Department" data-value="HR">
                                 Human Resource (HR)
                             </label>
                             <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                                 <input type="checkbox"
                                     class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:!border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:!border-transparent"
-                                    data-group="Department" data-value="Finance (FIN)">
+                                    data-group="Department" data-value="Finance">
                                 Finance (FIN)
                             </label>
                             <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                                 <input type="checkbox"
                                     class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:!border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:!border-transparent"
-                                    data-group="Department" data-value="Supply Chain (SUPP)">
+                                    data-group="Department" data-value="Supply Chain">
                                 Supply Chain (SUPP)
                             </label>
                             <label class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
                                 <input type="checkbox"
                                     class="filter-checkbox w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 hover:!border-gray-400 rounded focus:ring-teal-500 focus:ring-2 focus:ring-offset-0 transition-none checked:hover:bg-teal-700 checked:hover:!border-transparent"
-                                    data-group="Department" data-value="Procurement (PROC)">
+                                    data-group="Department" data-value="Procurement">
                                 Procurement (PROC)
                             </label>
                         </div>
@@ -398,8 +398,26 @@
                                     {{ $ticket->priority }}
                                 </span>
                             </td>
-                            <td class="px-4 py-2">{{ $ticket->user->name ?? 'Unknown' }}</td>
-                            <td class="px-4 py-2">{{ $ticket->assignee->name ?? 'Unassigned' }}</td>
+                            <td class="px-4 py-2">
+                                @if($ticket->user)
+                                    <a href="{{ route('user.profile.view', $ticket->user->userID) }}"
+                                        class="text-teal-600 hover:underline">
+                                        {{ $ticket->user->name }}
+                                    </a>
+                                @else
+                                    Unknown
+                                @endif
+                            </td>
+                            <td class="px-4 py-2">
+                                @if($ticket->assignee)
+                                    <a href="{{ route('user.profile.view', $ticket->assignee->userID) }}"
+                                        class="text-teal-600 hover:underline">
+                                        {{ $ticket->assignee->name }}
+                                    </a>
+                                @else
+                                    Unassigned
+                                @endif
+                            </td>
                             <td class="px-4 py-2">{{ Str::limit($ticket->summary, 50) }}</td>
                             <td class="px-4 py-2">
                                 @php
@@ -507,52 +525,102 @@
                 }
             });
 
-            //FILTER LOGIC
+            document.addEventListener('DOMContentLoaded', () => {
+                //FILTER LOGIC
 
-            const checkboxes = document.querySelectorAll('.filter-checkbox');
-            const selectedFilters = document.getElementById('selectedFilters');
-            // selectedCount removed from filter logic
+                const checkboxes = document.querySelectorAll('.filter-checkbox');
+                const selectedFilters = document.getElementById('selectedFilters');
+                // selectedCount removed from filter logic
 
-            function updateFilters() {
-                selectedFilters.innerHTML = '';
-                let count = 0;
-
+                // 1. Pre-check based on URL Params
+                const urlParams = new URLSearchParams(window.location.search);
                 checkboxes.forEach(cb => {
-                    if (cb.checked) {
-                        count++;
-                        const chip = document.createElement('span');
-                        chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
+                    const group = cb.dataset.group;
+                    const value = cb.dataset.value;
+                    let paramName = '';
 
-                        chip.innerHTML = `
-                                            ${cb.dataset.group}: ${cb.dataset.value}
-                                            <button class="ml-1 text-gray-500">&times;</button>
-                                        `;
+                    if (group === 'All Tickets') paramName = 'status[]';
+                    else if (group === 'Department') paramName = 'department[]';
+                    else if (group === 'Assignee') paramName = 'assignee[]';
 
-                        chip.querySelector('button').onclick = () => {
-                            cb.checked = false;
-                            updateFilters();
-                        };
-
-                        selectedFilters.appendChild(chip);
+                    // Check exact matches or "Open/Closed Tickets" mapping
+                    if (urlParams.getAll(paramName).includes(value)) {
+                        cb.checked = true;
+                    }
+                     // Special handling for "Open Tickets" value vs "Open" param
+                    if (group === 'All Tickets') {
+                        let status = value.replace(' Tickets', '');
+                         if (urlParams.getAll('status[]').includes(status)) {
+                            cb.checked = true;
+                        }
                     }
                 });
-                // No longer updating selectedCount here
-            }
-
-            checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
-
-            document.getElementById('resetFilters').onclick = () => {
-                checkboxes.forEach(cb => cb.checked = false);
                 updateFilters();
-            };
 
-            document.getElementById('clearFilters').onclick = () => {
-                checkboxes.forEach(cb => cb.checked = false);
-                updateFilters();
-            };
+                function updateFilters() {
+                    selectedFilters.innerHTML = '';
+                    let count = 0;
 
-            document.getElementById('applyFilters').onclick = () => {
-                console.log('Filters applied');
-            };
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) {
+                            count++;
+                            const chip = document.createElement('span');
+                            chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
+
+                            chip.innerHTML = `
+                                                        ${cb.dataset.group}: ${cb.dataset.value}
+                                                        <button class="ml-1 text-gray-500">&times;</button>
+                                                    `;
+
+                            chip.querySelector('button').onclick = () => {
+                                cb.checked = false;
+                                updateFilters();
+                            };
+
+                            selectedFilters.appendChild(chip);
+                        }
+                    });
+                    // No longer updating selectedCount here
+                }
+
+                checkboxes.forEach(cb => cb.addEventListener('change', updateFilters));
+
+                document.getElementById('resetFilters').onclick = () => {
+                    checkboxes.forEach(cb => cb.checked = false);
+                    updateFilters();
+                    window.location.href = window.location.pathname;
+                };
+
+                const clearBtn = document.getElementById('clearFilters');
+                if (clearBtn) {
+                    clearBtn.onclick = () => {
+                        checkboxes.forEach(cb => cb.checked = false);
+                        updateFilters();
+                        window.location.href = window.location.pathname;
+                    };
+                }
+
+                document.getElementById('applyFilters').onclick = () => {
+                   const params = new URLSearchParams();
+
+                    checkboxes.forEach(cb => {
+                        if (cb.checked) {
+                            const group = cb.dataset.group;
+                            const value = cb.dataset.value;
+
+                            if (group === 'All Tickets') {
+                                let status = value.replace(' Tickets', '');
+                                params.append('status[]', status);
+                            } else if (group === 'Department') {
+                                params.append('department[]', value);
+                            } else if (group === 'Assignee') {
+                                params.append('assignee[]', value);
+                            }
+                        }
+                    });
+
+                    window.location.href = `${window.location.pathname}?${params.toString()}`;
+                };
+            });
         </script>
 @endsection

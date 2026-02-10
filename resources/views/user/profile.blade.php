@@ -68,11 +68,11 @@
                                         </div>
 
                                         <input type="file" name="profile_picture" accept="image/*" @change="
-                                                            const file = $event.target.files[0];
-                                                            const reader = new FileReader();
-                                                            reader.onload = (e) => { photoPreview = e.target.result };
-                                                            reader.readAsDataURL(file);
-                                                        "
+                                                                        const file = $event.target.files[0];
+                                                                        const reader = new FileReader();
+                                                                        reader.onload = (e) => { photoPreview = e.target.result };
+                                                                        reader.readAsDataURL(file);
+                                                                    "
                                             class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer">
                                     </div>
                                 </div>
@@ -131,19 +131,7 @@
                         <p class="font-medium">{{ $user->user_phone ?? 'N/A' }}</p>
                     </div>
 
-                    <div>
-                        <p class="text-gray-500">Service Rating</p>
-                        <p class="font-medium">
-                            @php
-                                $avgRating = $user->ratingsReceived()->avg('rating') ?? 0;
-                                $ratingCount = $user->ratingsReceived()->count();
-                            @endphp
-                            @for($i = 0; $i < round($avgRating); $i++)
-                                ⭐
-                            @endfor
-                            ({{ number_format($avgRating, 1) }}) - {{ $ratingCount }} Reviews
-                        </p>
-                    </div>
+
                 </div>
             </div>
 
@@ -211,11 +199,11 @@
                                             <td class="px-4 py-2">
                                                 <span
                                                     class="px-2 py-1 rounded-full text-xs font-semibold
-                                                                                                                        {{ $ticket->status === 'Open' ? 'bg-green-100 text-green-800' : '' }}
-                                                                                                                        {{ $ticket->status === 'In Progress' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                                                                                        {{ $ticket->status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                                                                                        {{ $ticket->status === 'Resolved' ? 'bg-gray-100 text-gray-800' : '' }}
-                                                                                                                        {{ $ticket->status === 'Closed' ? 'bg-gray-200 text-gray-800' : '' }}">
+                                                                                                                                                {{ $ticket->status === 'Open' ? 'bg-green-100 text-green-800' : '' }}
+                                                                                                                                                {{ $ticket->status === 'In Progress' ? 'bg-blue-100 text-blue-800' : '' }}
+                                                                                                                                                {{ $ticket->status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                                                                                                                {{ $ticket->status === 'Resolved' ? 'bg-gray-100 text-gray-800' : '' }}
+                                                                                                                                                {{ $ticket->status === 'Closed' ? 'bg-gray-200 text-gray-800' : '' }}">
                                                     {{ $ticket->status }}
                                                 </span>
                                             </td>
@@ -354,6 +342,45 @@
                             No ratings given yet.
                         </div>
                     @endforelse
+                </div>
+
+                <!-- Ratings Received Section -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">Ratings Received from Others</h4>
+                    <div class="space-y-4">
+                        @forelse($ratingsReceived as $rating)
+                            <div class="border-b pb-4 last:border-0 last:pb-0">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold overflow-hidden">
+                                            <!-- Initials -->
+                                            {{ substr($rating->rater->name, 0, 1) }}
+                                        </div>
+                                        <div>
+                                            <p class="font-medium text-sm">{{ $rating->rater->name }}</p>
+                                            <div class="flex text-yellow-400 text-xs">
+                                                @for($i = 0; $i < $rating->rating; $i++) ★ @endfor
+                                                @for($i = $rating->rating; $i < 5; $i++) <span class="text-gray-300">★</span>
+                                                @endfor
+                                                <span class="text-gray-400 ml-2">({{ $rating->rating }}.0)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-gray-500">{{ $rating->created_at->diffForHumans() }}</span>
+                                </div>
+                                @if($rating->comment)
+                                    <p class="text-sm text-gray-600 mt-2 ml-13 pl-13">
+                                        {{ $rating->comment }}
+                                    </p>
+                                @endif
+                            </div>
+                        @empty
+                            <div class="text-center py-4 text-gray-500 text-sm">
+                                No ratings received yet.
+                            </div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
 
