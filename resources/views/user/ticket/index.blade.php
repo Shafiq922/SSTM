@@ -129,6 +129,52 @@
                 </div>
             </div>
 
+            <!-- Priority Filter Badges -->
+            <div class="flex flex-wrap items-center gap-2 mt-2 sm:mt-0 sm:ml-6">
+                <span class="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                    <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2l-7 8v5l-4 2v-7L3 6V4z"></path>
+                    </svg>
+                    Filter Priority:
+                </span>
+
+                <a href="{{ route('dashboard', ['priority' => 'Critical']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
+                                                                                                                        {{ request('priority') == 'Critical'
+        ? 'bg-red-100 text-red-800 border-red-300 ring-2 ring-red-200'
+        : 'bg-white text-gray-600 border-gray-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200' }}">
+                    Critical
+                </a>
+
+                <a href="{{ route('dashboard', ['priority' => 'High']) }}"
+                    class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
+                                                                                                                        {{ request('priority') == 'High'
+        ? 'bg-orange-100 text-orange-800 border-orange-300 ring-2 ring-orange-200'
+        : 'bg-white text-gray-600 border-gray-200 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200' }}">
+                    High
+                </a>
+
+                <a href="{{ route('dashboard', ['priority' => 'Medium']) }}"
+                    class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
+                                                                                                                        {{ request('priority') == 'Medium'
+        ? 'bg-yellow-100 text-yellow-800 border-yellow-300 ring-2 ring-yellow-200'
+        : 'bg-white text-gray-600 border-gray-200 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200' }}">
+                    Medium
+                </a>
+
+                <a href="{{ route('dashboard', ['priority' => 'Low']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
+                                                                                                                        {{ request('priority') == 'Low'
+        ? 'bg-green-100 text-green-800 border-green-300 ring-2 ring-green-200'
+        : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200' }}">
+                    Low
+                </a>
+
+                @if(request('priority'))
+                    <a href="{{ route('dashboard') }}" class="text-xs text-gray-500 underline hover:text-gray-800 ml-2">Clear
+                        Filter</a>
+                @endif
+            </div>
+
             <div class="flex flex-wrap items-center gap-3 sm:gap-4 ml-auto justify-end">
 
                 <!-- Filter button -->
@@ -300,7 +346,7 @@
                     <tr>
                         <th scope="col" class="px-4 py-3">Display id</th>
                         <th scope="col" class="px-4 py-3">Priority</th>
-                        <th scope="col" class="px-4 py-3">Estimated Waiting Time</th>
+                        <th scope="col" class="px-4 py-3">Estimated Waiting Time to be Serve</th>
                         <th scope="col" class="px-4 py-3">Customer Full Name</th>
                         <th scope="col" class="px-4 py-3">Assignee Name</th>
                         <th scope="col" class="px-4 py-3">Summary</th>
@@ -471,9 +517,9 @@
                             chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
 
                             chip.innerHTML = `
-                                                    ${cb.dataset.group}: ${cb.dataset.value}
-                                                    <button class="ml-1 text-gray-500">&times;</button>
-                                                `;
+                                                        ${cb.dataset.group}: ${cb.dataset.value}
+                                                        <button class="ml-1 text-gray-500">&times;</button>
+                                                    `;
 
                             chip.querySelector('button').onclick = () => {
                                 cb.checked = false;

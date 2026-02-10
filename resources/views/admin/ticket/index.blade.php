@@ -76,7 +76,7 @@
                         </span>
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Critical']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                                {{ request('priority') == 'Critical'
+                                                                                                                                {{ request('priority') == 'Critical'
         ? 'bg-red-100 text-red-800 border-red-300 ring-2 ring-red-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-red-50 hover:text-red-700 hover:border-red-200' }}">
                             Critical
@@ -84,7 +84,7 @@
 
                         <a href="{{ route('admin.tickets', ['priority' => 'High']) }}"
                             class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                                {{ request('priority') == 'High'
+                                                                                                                                {{ request('priority') == 'High'
         ? 'bg-orange-100 text-orange-800 border-orange-300 ring-2 ring-orange-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200' }}">
                             High
@@ -92,14 +92,14 @@
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Medium']) }}"
                             class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                                {{ request('priority') == 'Medium'
+                                                                                                                                {{ request('priority') == 'Medium'
         ? 'bg-yellow-100 text-yellow-800 border-yellow-300 ring-2 ring-yellow-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-yellow-50 hover:text-yellow-700 hover:border-yellow-200' }}">
                             Medium
                         </a>
 
                         <a href="{{ route('admin.tickets', ['priority' => 'Low']) }}" class="px-3 py-1 rounded-full text-xs font-semibold border transition-colors 
-                                                                                                                {{ request('priority') == 'Low'
+                                                                                                                                {{ request('priority') == 'Low'
         ? 'bg-green-100 text-green-800 border-green-300 ring-2 ring-green-200'
         : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:text-green-700 hover:border-green-200' }}">
                             Low
@@ -362,6 +362,7 @@
                         </th>
                         <th scope="col" class="px-4 py-3">Display id</th>
                         <th scope="col" class="px-4 py-3">Priority</th>
+                        <th scope="col" class="px-4 py-3">Estimated Waiting Time to be Serve</th>
                         <th scope="col" class="px-4 py-3">Customer Full Name</th>
                         <th scope="col" class="px-4 py-3">Assignee Name</th>
                         <th scope="col" class="px-4 py-3">Summary</th>
@@ -398,6 +399,57 @@
                                     class="{{ $priorityClasses }} w-20 inline-flex justify-center text-xs font-medium px-2.5 py-0.5 rounded">
                                     {{ $ticket->priority }}
                                 </span>
+                            </td>
+                            <td class="px-4 py-2">
+                                @php
+                                    $isCompleted = in_array($ticket->status, ['Resolved', 'Closed', 'Cancelled']);
+                                    $responseDue = $ticket->response_due;
+                                @endphp
+
+                                @if($isCompleted)
+                                    <span class="text-gray-400 text-xs">Completed</span>
+                                @elseif($responseDue)
+                                    @php
+                                        $now = now();
+                                        $remainingMinutes = (int) $now->diffInMinutes($responseDue, false);
+                                        $totalMinutes = $ticket->sla->response_time_minutes ?? 1;
+
+                                        if ($remainingMinutes <= 0) {
+                                            $countdownColor = 'text-red-600 font-bold';
+                                            $displayText = '0 minutes';
+                                        } elseif ($remainingMinutes <= ($totalMinutes * 0.25)) {
+                                            $countdownColor = 'text-orange-600 font-semibold';
+                                            if ($remainingMinutes >= 60) {
+                                                $hours = floor($remainingMinutes / 60);
+                                                $mins = $remainingMinutes % 60;
+                                                $displayText = $hours . 'h ' . $mins . 'm';
+                                            } else {
+                                                $displayText = $remainingMinutes . ' minutes';
+                                            }
+                                        } else {
+                                            $countdownColor = 'text-green-600 font-medium';
+                                            if ($remainingMinutes >= 60) {
+                                                $hours = floor($remainingMinutes / 60);
+                                                $mins = $remainingMinutes % 60;
+                                                $displayText = $hours . 'h ' . $mins . 'm';
+                                            } else {
+                                                $displayText = $remainingMinutes . ' minutes';
+                                            }
+                                        }
+                                    @endphp
+                                    <span class="countdown-timer {{ $countdownColor }}"
+                                        data-response-due="{{ $responseDue->toIso8601String() }}"
+                                        data-total-minutes="{{ $totalMinutes }}">
+                                        {{ $displayText }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-400 text-xs">
+                                        N/A
+                                        <!-- DEBUG INFO -->
+                                        (SLA ID: {{ $ticket->slaID ?? 'Null' }},
+                                        Due: {{ $ticket->response_due ? 'Yes' : 'No' }})
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-4 py-2">
                                 @if($ticket->user)
@@ -569,9 +621,9 @@
                             chip.className = 'flex items-center gap-1 rounded-md bg-gray-100 border border-gray-200 px-3 py-1 text-xs text-gray-700';
 
                             chip.innerHTML = `
-                                                            ${cb.dataset.group}: ${cb.dataset.value}
-                                                            <button class="ml-1 text-gray-500">&times;</button>
-                                                        `;
+                                                                            ${cb.dataset.group}: ${cb.dataset.value}
+                                                                            <button class="ml-1 text-gray-500">&times;</button>
+                                                                        `;
 
                             chip.querySelector('button').onclick = () => {
                                 cb.checked = false;
@@ -622,6 +674,50 @@
 
                     window.location.href = `${window.location.pathname}?${params.toString()}`;
                 };
+
+                // LIVE COUNTDOWN TIMER for Estimated Waiting Time
+                function updateCountdowns() {
+                    const timers = document.querySelectorAll('.countdown-timer');
+                    const now = new Date();
+
+                    timers.forEach(timer => {
+                        const responseDue = new Date(timer.dataset.responseDue);
+                        const totalMinutes = parseInt(timer.dataset.totalMinutes) || 1;
+                        const diffMs = responseDue - now;
+                        const remainingMinutes = Math.max(0, Math.floor(diffMs / 60000));
+
+                        // Update display text
+                        let displayText;
+                        if (remainingMinutes <= 0) {
+                            displayText = '0 minutes';
+                        } else if (remainingMinutes >= 60) {
+                            const hours = Math.floor(remainingMinutes / 60);
+                            const mins = remainingMinutes % 60;
+                            displayText = hours + 'h ' + mins + 'm';
+                        } else {
+                            displayText = remainingMinutes + ' minutes';
+                        }
+                        timer.textContent = displayText;
+
+                        // Update color classes
+                        timer.classList.remove(
+                            'text-red-600', 'font-bold',
+                            'text-orange-600', 'font-semibold',
+                            'text-green-600', 'font-medium'
+                        );
+
+                        if (remainingMinutes <= 0) {
+                            timer.classList.add('text-red-600', 'font-bold');
+                        } else if (remainingMinutes <= (totalMinutes * 0.25)) {
+                            timer.classList.add('text-orange-600', 'font-semibold');
+                        } else {
+                            timer.classList.add('text-green-600', 'font-medium');
+                        }
+                    });
+                }
+
+                // Update every 60 seconds
+                setInterval(updateCountdowns, 60000);
             });
         </script>
 @endsection

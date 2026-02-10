@@ -8,7 +8,7 @@
 
             <!-- PROFILE HEADER -->
             <div class="bg-white p-6 rounded-lg shadow border"
-                x-data="{ showEditModal: false, photoPreview: null, imgLoadError: false }">
+                x-data="{ showEditModal: false, showZoomModal: false, photoPreview: null, imgLoadError: false }">
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-xl font-semibold">Profile</h1>
                     <button type="button" @click="showEditModal = true"
@@ -68,11 +68,11 @@
                                         </div>
 
                                         <input type="file" name="profile_picture" accept="image/*" @change="
-                                                                            const file = $event.target.files[0];
-                                                                            const reader = new FileReader();
-                                                                            reader.onload = (e) => { photoPreview = e.target.result };
-                                                                            reader.readAsDataURL(file);
-                                                                        "
+                                                                                        const file = $event.target.files[0];
+                                                                                        const reader = new FileReader();
+                                                                                        reader.onload = (e) => { photoPreview = e.target.result };
+                                                                                        reader.readAsDataURL(file);
+                                                                                    "
                                             class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer">
                                     </div>
                                 </div>
@@ -89,9 +89,9 @@
                 </div>
 
                 <div class="flex items-center gap-6">
-                    <div
-                        class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden relative">
-                        @if($user->profile_picture)
+                    <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden relative cursor-pointer hover:opacity-90 transition"
+                        @click="showZoomModal = true">
+                        @if ($user->profile_picture)
                             <img src="{{ Storage::url($user->profile_picture) }}" alt="Profile"
                                 class="w-full h-full object-cover" x-show="!imgLoadError" x-on:error="imgLoadError = true">
                             <div x-show="imgLoadError" class="absolute inset-0 flex items-center justify-center bg-gray-200">
@@ -133,6 +133,34 @@
 
 
                 </div>
+                <!-- PROFLIE PICTURE ZOOM MODAL -->
+                <div x-show="showZoomModal"
+                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm"
+                    style="display: none;" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform scale-95"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-95" @click.away="showZoomModal = false">
+                    <div class="relative max-w-3xl max-h-[90vh] p-2" @click.away="showZoomModal = false">
+                        <button @click="showZoomModal = false"
+                            class="absolute -top-10 right-0 text-white hover:text-gray-300 focus:outline-none">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        @if ($user->profile_picture)
+                            <img src="{{ Storage::url($user->profile_picture) }}" alt="Profile Full Size"
+                                class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
+                        @else
+                            <div class="w-64 h-64 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                                <span class="text-6xl">👤</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
             </div>
 
             <!-- TABS & CONTENT -->
@@ -199,11 +227,11 @@
                                             <td class="px-4 py-2">
                                                 <span
                                                     class="px-2 py-1 rounded-full text-xs font-semibold
-                                                                                                                                                        {{ $ticket->status === 'Open' ? 'bg-green-100 text-green-800' : '' }}
-                                                                                                                                                        {{ $ticket->status === 'In Progress' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                                                                                                                        {{ $ticket->status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                                                                                                                        {{ $ticket->status === 'Resolved' ? 'bg-gray-100 text-gray-800' : '' }}
-                                                                                                                                                        {{ $ticket->status === 'Closed' ? 'bg-gray-200 text-gray-800' : '' }}">
+                                                                                                                                                                                {{ $ticket->status === 'Open' ? 'bg-green-100 text-green-800' : '' }}
+                                                                                                                                                                                {{ $ticket->status === 'In Progress' ? 'bg-blue-100 text-blue-800' : '' }}
+                                                                                                                                                                                {{ $ticket->status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                                                                                                                                                {{ $ticket->status === 'Resolved' ? 'bg-gray-100 text-gray-800' : '' }}
+                                                                                                                                                                                {{ $ticket->status === 'Closed' ? 'bg-gray-200 text-gray-800' : '' }}">
                                                     {{ $ticket->status }}
                                                 </span>
                                             </td>

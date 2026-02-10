@@ -91,6 +91,11 @@ class DashboardController extends Controller
             });
         }
 
+        // 4. Priority Filter
+        if ($request->has('priority')) {
+            $query->where('priority', $request->input('priority'));
+        }
+
         // --- Custom Sorting Logic ---
         // 1. Status: Active (Open/In Progress/Pending) assigned higher priority (0) than Checked/Closed (1)
         // 2. Priority: Critical (0), High (1), Medium (2), Low (3)

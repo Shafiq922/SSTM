@@ -1,6 +1,6 @@
 <!-- Navbar -->
 <nav class="fixed top-0 left-0 w-full z-50 bg-teal-500 border-b border-teal-600">
-    <div class="w-full flex flex-wrap items-center justify-between px-3 sm:px-4 md:px-6 p-3">
+    <div class="relative w-full flex flex-wrap items-center justify-between px-3 sm:px-4 md:px-6 p-3">
 
         <!-- Logo -->
         <a href="#" class="flex items-center space-x-2 rtl:space-x-reverse">
@@ -20,7 +20,8 @@
         </button>
 
         <!-- Nav Links (Centered) -->
-        <div class="hidden w-full md:flex md:w-auto md:items-center md:flex-1 md:justify-center" id="navbar-default">
+        <div class="hidden w-full md:flex md:w-auto md:items-center md:absolute md:left-1/2 md:-translate-x-1/2"
+            id="navbar-default">
             <ul
                 class="flex flex-col mt-4 md:mt-0 md:flex-row md:space-x-8 font-medium text-gray-900 dark:text-white bg-teal-600 md:bg-transparent rounded-lg md:rounded-none p-4 md:p-0">
                 <li>
@@ -98,11 +99,17 @@
                 <button id="userMenuButton" data-dropdown-toggle="userDropdown"
                     class="flex text-sm bg-transparent rounded-full focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600"
                     type="button">
-                    <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5.121 17.804A9 9 0 1118.879 6.196M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <span class="sr-only">Open user menu</span>
+                    @if(auth()->user()->profile_picture)
+                        <img class="w-8 h-8 rounded-full object-cover"
+                            src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="user photo">
+                    @else
+                        <svg class="w-8 h-8 text-gray-800 dark:text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5.121 17.804A9 9 0 1118.879 6.196M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    @endif
                 </button>
 
                 <!-- Dropdown menu -->

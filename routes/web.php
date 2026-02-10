@@ -108,7 +108,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
 
         // --- 2. Filtering & Data Fetching ---
-        $query = \App\Models\Ticket::with(['user', 'assignee']);
+        $query = \App\Models\Ticket::with(['user', 'assignee', 'sla']);
 
         // Custom Sorting
         // 1. Status: Active (Open, In Progress, Pending) > Inactive (Resolved, Closed, Cancelled)
