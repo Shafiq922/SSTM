@@ -114,6 +114,12 @@ class IncidentController extends Controller
 
             DB::commit(); // Save everything to database
 
+            $user = auth()->user();
+            if ($user->role && in_array($user->role->name, ['Admin', 'IT Staff'])) {
+                return redirect()->route('admin.tickets')
+                    ->with('success', "Incident #{$ticketCode} created successfully!");
+            }
+
             return redirect()->route('dashboard') // Or wherever you want to go
                 ->with('success', "Incident #{$ticketCode} created successfully!");
 

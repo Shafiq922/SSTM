@@ -8,7 +8,7 @@
                     <div class="flex items-center justify-center w-8 h-8 bg-teal-600 text-white font-bold rounded">T
                     </div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-gray-900">
-                        MyTicket+ <span class="font-semibold">Admin Portal</span>
+                        MyTicket+ <span class="font-semibold">Portal</span>
                     </h1>
                 </div>
 
@@ -33,7 +33,7 @@
                                 </svg>
                             </div>
                             <x-text-input id="email"
-                                class="block w-full pl-10 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-100 dark:text-gray-900 dark:border-gray-300"
+                                class="block w-full pl-10 !bg-gray-100 !border-gray-300 !text-gray-900 text-sm rounded-md focus:!ring-teal-500 focus:!border-teal-500"
                                 type="email" name="email" :value="old('email')" required autofocus
                                 autocomplete="username" />
                         </div>
@@ -45,7 +45,7 @@
                         <x-input-label for="password" :value="__('Password')" />
                         <div class="relative mt-1">
                             <x-text-input id="password"
-                                class="block w-full pr-10 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-100 dark:text-gray-900 dark:border-gray-300"
+                                class="block w-full pr-10 !bg-gray-100 !border-gray-300 !text-gray-900 text-sm rounded-md focus:!ring-teal-500 focus:!border-teal-500"
                                 type="password" name="password" required autocomplete="current-password" />
                             <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3"
                                 onclick="togglePassword()">
@@ -85,6 +85,15 @@
                             {{ __('Sign in') }}
                         </x-primary-button>
                     </div>
+
+                    <!-- Register Link -->
+                    <div class="flex items-center justify-center mt-4">
+                        <span class="text-sm text-gray-600">{{ __("Don't have an account?") }}</span>
+                        <a class="ml-1 text-sm text-teal-600 hover:underline font-medium"
+                            href="{{ route('register') }}">
+                            {{ __('Register') }}
+                        </a>
+                    </div>
                 </form>
             </div>
         </section>
@@ -93,11 +102,10 @@
         <section class="hidden md:flex w-full md:w-1/2 bg-teal-600 text-white items-center justify-center px-12">
             <div class="max-w-md space-y-4">
                 <h2 class="text-3xl font-serif font-semibold leading-snug">
-                    Streamlined Administrative Excellence
+                    Submit tickets. Track progress.
                 </h2>
                 <p class="text-teal-100 text-sm leading-relaxed">
-                    “Completely transformed your administrative processes.
-                    It’s intuitive, powerful, and keeps your operations running smoothly.”
+                    “Smart prioritization for smarter support.”
                 </p>
             </div>
         </section>

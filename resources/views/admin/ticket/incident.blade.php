@@ -43,7 +43,6 @@
 
                 <!-- Customer Info (Styled Block) -->
                 <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 mb-6">
-                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Customer Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block mb-2 text-xs font-medium text-gray-500 uppercase">Customer Name</label>
@@ -69,13 +68,12 @@
                             class="text-red-500">*</span></label>
                     <input type="text" id="summaryInput" name="summary"
                         class="w-full bg-gray-50 text-gray-900 text-sm rounded-xl border-transparent focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-200 block w-full p-4 transition-all duration-200 placeholder-gray-400 font-medium"
-                        required placeholder="Briefly describe the issue (e.g. System Login Failure)" autocomplete="off" />
+                        required placeholder="Enter a summary Template (eg: FIN)" autocomplete="off" />
                     <div id="summarySuggestions"
                         class="border border-gray-100 rounded-xl bg-white mt-2 hidden max-h-40 overflow-y-auto shadow-xl z-20">
                     </div>
                 </div>
 
-                <!-- Classification Grid -->
                 <!-- Classification Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -142,9 +140,8 @@
                                 <span class="sr-only">Show information</span>
                             </button>
                             <div data-popover id="popover-matrix-impact" role="tooltip"
-                                class="absolute z-50 invisible inline-block w-72 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
-                                <div
-                                    class="px-3 py-2 bg-slate-800 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+                                class="absolute z-50 invisible inline-block w-72 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0">
+                                <div class="px-3 py-2 bg-slate-800 border-b border-gray-200 rounded-t-lg ">
                                     <h3 class="font-semibold text-white">Priority Matrix</h3>
                                 </div>
                                 <div class="px-3 py-2">
@@ -200,7 +197,7 @@
                                             <tr class="bg-white hover:bg-gray-50">
                                                 <td class="px-2 py-1 border-r border-gray-300">3 - Low</td>
                                                 <td class="px-2 py-1 border-r border-gray-300">3 - Low</td>
-                                                <td class="px-2 py-1 text-blue-600">5 - Low</td>
+                                                <td class="px-2 py-1 text-blue-600">5 - Planning</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -246,10 +243,9 @@
                                 <span class="sr-only">Show information</span>
                             </button>
                             <div data-popover id="popover-matrix-urgency" role="tooltip"
-                                class="absolute z-50 invisible inline-block w-72 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
-                                <div
-                                    class="px-3 py-2 bg-slate-800 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
-                                    <h3 class="font-semibold text-white">Priority Matrix</h3>
+                                class="absolute z-50 invisible inline-block w-72 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0">
+                                <div class="px-3 py-2 bg-slate-800 border-b border-gray-200 rounded-t-lg ">
+                                    <h3 class="font-semibold text-white ">Priority Matrix</h3>
                                 </div>
                                 <div class="px-3 py-2">
                                     <table class="w-full text-xs text-left text-gray-700 border border-gray-300">
@@ -304,7 +300,7 @@
                                             <tr class="bg-white hover:bg-gray-50">
                                                 <td class="px-2 py-1 border-r border-gray-300">3 - Low</td>
                                                 <td class="px-2 py-1 border-r border-gray-300">3 - Low</td>
-                                                <td class="px-2 py-1 text-blue-600">5 - Low</td>
+                                                <td class="px-2 py-1 text-blue-600">5 - Planning</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -383,6 +379,7 @@
 
 
 
+
                 <!-- Description -->
                 <div class="relative">
                     <label class="block mb-2 text-sm font-semibold text-gray-700">Description</label>
@@ -394,7 +391,10 @@
                         / 10000 words</span>
                 </div>
 
-                <div class="mt-6">
+                <!-- File Attachment -->
+                <div class="relative">
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">Attachment <span
+                            class="text-gray-400 font-normal">(Optional)</span></label>
                     <label
                         class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200 group">
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -421,7 +421,7 @@
                     </button>
                     <button type="submit"
                         class="px-5 py-2.5 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 focus:ring-4 focus:ring-teal-300 transition-all duration-200 transform hover:-translate-y-0.5 shadow-sm hover:shadow-md">
-                        Create Ticket
+                        Submit Incident
                     </button>
                 </div>
 
@@ -512,13 +512,13 @@
                     category.sub_categories.forEach(sub => {
                         const li = document.createElement('li');
                         li.innerHTML = `
-                                                                                                                                                                            <button type="button" 
-                                                                                                                                                                                class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
-                                                                                                                                                                                data-id="${sub.subCategoryID || sub.id}"
-                                                                                                                                                                                data-name="${sub.name}">
-                                                                                                                                                                                ${sub.name}
-                                                                                                                                                                            </button>
-                                                                                                                                                                        `;
+                                                                                                                                                            <button type="button" 
+                                                                                                                                                                class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
+                                                                                                                                                                data-id="${sub.subCategoryID || sub.id}"
+                                                                                                                                                                data-name="${sub.name}">
+                                                                                                                                                                ${sub.name}
+                                                                                                                                                            </button>
+                                                                                                                                                        `;
                         subCategoryList.appendChild(li);
                     });
 
@@ -645,6 +645,27 @@
                     div.addEventListener('click', function () {
                         summaryInput.value = `${this.dataset.systemCode} - ${this.dataset.operationType} - ${this.dataset.userType}`;
                         suggestionsDiv.classList.add('hidden');
+
+                        // Map System Code to Category Name
+                        const templateCategoryMap = {
+                            'FIN': 'Incident – ERP Finance',
+                            'HR': 'Incident – ERP Human Resource (HR)',
+                            'PROC': 'Incident – ERP Procurement',
+                            'SUPP': 'Incident – ERP Supply Chain',
+                            'IT': 'IT Infrastructure'
+                        };
+
+                        const code = this.dataset.systemCode;
+                        if (templateCategoryMap[code]) {
+                            const targetName = templateCategoryMap[code];
+                            // Find matching category option
+                            const option = Array.from(document.querySelectorAll('.category-option'))
+                                .find(opt => opt.getAttribute('data-name') === targetName);
+
+                            if (option) {
+                                option.click(); // Trigger click to set value and load sub-categories
+                            }
+                        }
                     });
 
                     suggestionsDiv.appendChild(div);

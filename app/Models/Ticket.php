@@ -76,5 +76,20 @@ class Ticket extends Model
     {
         return $this->belongsTo(SummaryTemplate::class, 'summaryTemplateID');
     }
+
+    // SLA Accessors
+    public function getResponseDueAttribute()
+    {
+        if (!$this->sla || !$this->created_at)
+            return null;
+        return $this->created_at->addMinutes($this->sla->response_time_minutes);
+    }
+
+    public function getResolutionDueAttribute()
+    {
+        if (!$this->sla || !$this->created_at)
+            return null;
+        return $this->created_at->addMinutes($this->sla->resolution_time_minutes);
+    }
 }
 

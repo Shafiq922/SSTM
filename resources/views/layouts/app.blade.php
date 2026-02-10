@@ -25,15 +25,14 @@
         @include('layouts.navbar')
 
         <!-- Page Content -->
-        <main class="W-full">
+        <main class="w-full">
             @yield('content')
 
         </main>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js"></script>
-    
+
 
 </body>
 
 </html>
-

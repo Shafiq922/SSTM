@@ -28,6 +28,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Role-based redirect
+        if ($request->user()->role && in_array($request->user()->role->name, ['Admin', 'IT Staff'])) {
+            return redirect()->intended(route('admin.tickets', absolute: false));
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

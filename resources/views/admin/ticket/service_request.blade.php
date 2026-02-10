@@ -35,14 +35,13 @@
                 enctype="multipart/form-data">
                 @csrf
                 <!-- Using hidden type or assuming backend handles it based on route or other logic. 
-                                     For now reusing the incident route as requested for view duplication. -->
+                                             For now reusing the incident route as requested for view duplication. -->
                 <input type="hidden" name="category_id" id="input_category_id">
                 <input type="hidden" name="sub_category_id" id="input_sub_category_id">
                 <input type="hidden" name="priority" id="input_priority">
 
                 <!-- Customer Info (Styled Block) -->
                 <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100 mb-6">
-                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4">Customer Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block mb-2 text-xs font-medium text-gray-500 uppercase">Customer Name</label>
@@ -68,7 +67,7 @@
                             class="text-red-500">*</span></label>
                     <input type="text" id="summaryInput" name="summary"
                         class="w-full bg-gray-50 text-gray-900 text-sm rounded-xl border-transparent focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-200 block w-full p-4 transition-all duration-200 placeholder-gray-400 font-medium"
-                        required placeholder="Briefly describe the request" autocomplete="off" />
+                        required placeholder="Enter a Summary Template (eg:FIN)" autocomplete="off" />
                     <div id="summarySuggestions"
                         class="border border-gray-100 rounded-xl bg-white mt-2 hidden max-h-40 overflow-y-auto shadow-xl z-20">
                     </div>
@@ -207,8 +206,8 @@
                     <button type="button" id="removeFileBtn" class="hidden text-red-500 text-sm mt-2 hover:underline">Remove
                         selected file</button>
                     <!-- HTML5 required attribute on file input might not work with hidden input perfectly for UI feedback, 
-                                         but standard form submission will catch it if not hidden, or we rely on backend validation.
-                                         Ideally, we should add JS validation for the hidden file input. -->
+                                                 but standard form submission will catch it if not hidden, or we rely on backend validation.
+                                                 Ideally, we should add JS validation for the hidden file input. -->
                 </div>
 
                 <div class="flex justify-end gap-3 pt-6 border-t border-gray-100">
@@ -307,13 +306,13 @@
                     category.sub_categories.forEach(sub => {
                         const li = document.createElement('li');
                         li.innerHTML = `
-                                                                                                                                                                                    <button type="button" 
-                                                                                                                                                                                        class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
-                                                                                                                                                                                        data-id="${sub.subCategoryID || sub.id}"
-                                                                                                                                                                                        data-name="${sub.name}">
-                                                                                                                                                                                        ${sub.name}
-                                                                                                                                                                                    </button>
-                                                                                                                                                                                `;
+                                                                                                                                                                                                                                    <button type="button" 
+                                                                                                                                                                                                                                        class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
+                                                                                                                                                                                                                                        data-id="${sub.subCategoryID || sub.id}"
+                                                                                                                                                                                                                                        data-name="${sub.name}">
+                                                                                                                                                                                                                                        ${sub.name}
+                                                                                                                                                                                                                                    </button>
+                                                                                                                                                                                                                                `;
                         subCategoryList.appendChild(li);
                     });
 
@@ -381,6 +380,26 @@
                     div.addEventListener('click', function () {
                         summaryInput.value = `${this.dataset.systemCode} - ${this.dataset.operationType} - ${this.dataset.userType}`;
                         suggestionsDiv.classList.add('hidden');
+
+                        // Map System Code to Category Name
+                        const templateCategoryMap = {
+                            'FIN': 'ERP – Finance',
+                            'HR': 'ERP – Human Resource (HR)',
+                            'PROC': 'ERP – Procurement',
+                            'SUPP': 'ERP – Supply Chain'
+                        };
+
+                        const code = this.dataset.systemCode;
+                        if (templateCategoryMap[code]) {
+                            const targetName = templateCategoryMap[code];
+                            // Find matching category option
+                            const option = Array.from(document.querySelectorAll('.category-option'))
+                                .find(opt => opt.getAttribute('data-name') === targetName);
+
+                            if (option) {
+                                option.click(); // Trigger click to set value and load sub-categories
+                            }
+                        }
                     });
 
                     suggestionsDiv.appendChild(div);

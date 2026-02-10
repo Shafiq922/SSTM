@@ -20,9 +20,11 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'user_phone',
         'password',
         'roleID',
         'departmentID',
+        'profile_picture',
     ];
 
     /**
@@ -66,6 +68,11 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class, 'userID');
     }
 
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'assigneeID');
+    }
+
     public function attachments()
     {
         return $this->hasMany(Attachment::class, 'userID');
@@ -74,6 +81,16 @@ class User extends Authenticatable
     public function ticketLogs()
     {
         return $this->hasMany(TicketLog::class, 'userID');
+    }
+
+    public function ratingsGiven()
+    {
+        return $this->hasMany(ServiceRating::class, 'rater_userID');
+    }
+
+    public function ratingsReceived()
+    {
+        return $this->hasMany(ServiceRating::class, 'ratee_userID');
     }
 }
 

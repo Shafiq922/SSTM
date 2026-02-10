@@ -24,5 +24,10 @@ class TicketLog extends Model
     {
         return $this->belongsTo(User::class, 'userID');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class, 'ticketLogID', 'ticketLogID');
+    }
 }
 
