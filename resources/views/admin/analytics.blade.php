@@ -307,7 +307,7 @@
                                         $priorityColors = [
                                             'Critical' => 'text-red-600',
                                             'High' => 'text-orange-600',
-                                            'Medium' => 'text-yellow-600',
+                                            'Moderate' => 'text-yellow-600',
                                             'Low' => 'text-green-600',
                                         ];
                                     @endphp
@@ -410,7 +410,7 @@
             new Chart(priorityCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Low', 'Medium', 'High', 'Critical'],
+                    labels: ['Low', 'Moderate', 'High', 'Critical'],
                     datasets: [{
                         label: 'Tickets',
                         data: {!! json_encode($priorityChartData) !!},

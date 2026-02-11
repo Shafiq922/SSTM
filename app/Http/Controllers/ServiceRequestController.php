@@ -56,7 +56,7 @@ class ServiceRequestController extends Controller
             'summary' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,categoryID',
             'sub_category_id' => 'required|exists:sub_categories,subCategoryID',
-            'priority' => 'required|in:High,Medium,Low',
+            'priority' => 'required|in:High,Moderate,Low',
             'description' => 'nullable|string',
             'attachment' => 'required|file|max:10240', // Mandatory as requested
         ]);

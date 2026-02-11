@@ -77,7 +77,7 @@ class AnalyticsController extends Controller
         $departmentStats = array_slice($departmentStats, 0, 4);
 
         // Priority Stats with real trends
-        $priorities = ['Critical', 'High', 'Medium', 'Low'];
+        $priorities = ['Critical', 'High', 'Moderate', 'Low'];
         $priorityStats = [];
         foreach ($priorities as $priority) {
             $thisWeekCount = Ticket::where('priority', $priority)
@@ -162,7 +162,7 @@ class AnalyticsController extends Controller
         // Priority Distribution for bar chart
         $priorityChartData = [
             Ticket::where('priority', 'Low')->count(),
-            Ticket::where('priority', 'Medium')->count(),
+            Ticket::where('priority', 'Moderate')->count(),
             Ticket::where('priority', 'High')->count(),
             Ticket::where('priority', 'Critical')->count(),
         ];

@@ -35,7 +35,7 @@
                 enctype="multipart/form-data">
                 @csrf
                 <!-- Using hidden type or assuming backend handles it based on route or other logic. 
-                                                 For now reusing the incident route as requested for view duplication. -->
+                                                     For now reusing the incident route as requested for view duplication. -->
                 <input type="hidden" name="category_id" id="input_category_id">
                 <input type="hidden" name="sub_category_id" id="input_sub_category_id">
                 <input type="hidden" name="priority" id="input_priority">
@@ -163,7 +163,7 @@
                                             <tr class="bg-white border-b border-gray-300 hover:bg-gray-50">
                                                 <td
                                                     class="px-2 py-1 border-r border-gray-300 font-semibold text-yellow-600">
-                                                    Medium</td>
+                                                    Moderate</td>
                                                 <td class="px-2 py-1 border-r border-gray-300 text-center">4 hours</td>
                                                 <td class="px-2 py-1 text-center">2 days</td>
                                             </tr>
@@ -193,7 +193,7 @@
                                         data-value="High">High</button></li>
                                 <li><button type="button"
                                         class="block w-full text-left px-5 py-3 hover:bg-teal-50 hover:text-teal-700 priority-option transition-colors"
-                                        data-value="Medium">Medium</button></li>
+                                        data-value="Moderate">Moderate</button></li>
                                 <li><button type="button"
                                         class="block w-full text-left px-5 py-3 hover:bg-teal-50 hover:text-teal-700 priority-option transition-colors"
                                         data-value="Low">Low</button></li>
@@ -256,8 +256,8 @@
                     <button type="button" id="removeFileBtn" class="hidden text-red-500 text-sm mt-2 hover:underline">Remove
                         selected file</button>
                     <!-- HTML5 required attribute on file input might not work with hidden input perfectly for UI feedback, 
-                                                     but standard form submission will catch it if not hidden, or we rely on backend validation.
-                                                     Ideally, we should add JS validation for the hidden file input. -->
+                                                         but standard form submission will catch it if not hidden, or we rely on backend validation.
+                                                         Ideally, we should add JS validation for the hidden file input. -->
                 </div>
 
                 <div class="flex justify-end gap-3 pt-6 border-t border-gray-100">
@@ -356,13 +356,13 @@
                     category.sub_categories.forEach(sub => {
                         const li = document.createElement('li');
                         li.innerHTML = `
-                                                                                                                                                                                                                                        <button type="button" 
-                                                                                                                                                                                                                                            class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
-                                                                                                                                                                                                                                            data-id="${sub.subCategoryID || sub.id}"
-                                                                                                                                                                                                                                            data-name="${sub.name}">
-                                                                                                                                                                                                                                            ${sub.name}
-                                                                                                                                                                                                                                        </button>
-                                                                                                                                                                                                                                    `;
+                                                                                                                                                                                                                                            <button type="button" 
+                                                                                                                                                                                                                                                class="block w-full px-4 py-2 text-left hover:bg-gray-100 sub-category-option" 
+                                                                                                                                                                                                                                                data-id="${sub.subCategoryID || sub.id}"
+                                                                                                                                                                                                                                                data-name="${sub.name}">
+                                                                                                                                                                                                                                                ${sub.name}
+                                                                                                                                                                                                                                            </button>
+                                                                                                                                                                                                                                        `;
                         subCategoryList.appendChild(li);
                     });
 

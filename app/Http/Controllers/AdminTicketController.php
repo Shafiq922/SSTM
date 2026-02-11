@@ -36,7 +36,7 @@ class AdminTicketController extends Controller
             'attachment' => 'nullable|file|max:10240',
             'impact_level' => 'nullable|string|in:High,Medium,Low',
             'urgency' => 'nullable|string|in:High,Medium,Low',
-            'priority' => 'nullable|string|in:Critical,High,Medium,Low',
+            'priority' => 'nullable|string|in:Critical,High,Moderate,Low',
         ]);
 
         DB::beginTransaction();
@@ -85,9 +85,9 @@ class AdminTicketController extends Controller
 
                 // Auto-calculate Priority from Impact and Urgency
                 $priorityMatrix = [
-                    'High' => ['High' => 'Critical', 'Medium' => 'High', 'Low' => 'Medium'],
-                    'Medium' => ['High' => 'High', 'Medium' => 'Medium', 'Low' => 'Low'],
-                    'Low' => ['High' => 'Medium', 'Medium' => 'Low', 'Low' => 'Low'],
+                    'High' => ['High' => 'Critical', 'Moderate' => 'High', 'Low' => 'Moderate'],
+                    'Moderate' => ['High' => 'High', 'Moderate' => 'Moderate', 'Low' => 'Low'],
+                    'Low' => ['High' => 'Moderate', 'Moderate' => 'Low', 'Low' => 'Low'],
                 ];
                 $newPriority = $priorityMatrix[$ticket->impact_level][$ticket->urgency] ?? 'Low';
                 if ($ticket->priority !== $newPriority) {

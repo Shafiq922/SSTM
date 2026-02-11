@@ -20,7 +20,7 @@ class DashboardController extends Controller
                 CASE priority
                     WHEN 'Critical' THEN 1
                     WHEN 'High' THEN 2
-                    WHEN 'Medium' THEN 3
+                    WHEN 'Moderate' THEN 3
                     WHEN 'Low' THEN 4
                     ELSE 5
                 END ASC,
@@ -98,7 +98,7 @@ class DashboardController extends Controller
 
         // --- Custom Sorting Logic ---
         // 1. Status: Active (Open/In Progress/Pending) assigned higher priority (0) than Checked/Closed (1)
-        // 2. Priority: Critical (0), High (1), Medium (2), Low (3)
+        // 2. Priority: Critical (0), High (1), Moderate (2), Low (3)
         // 3. Created At: Ascending (Oldest First)
 
         $query->orderByRaw("
@@ -109,7 +109,7 @@ class DashboardController extends Controller
             CASE priority
                 WHEN 'Critical' THEN 1
                 WHEN 'High' THEN 2
-                WHEN 'Medium' THEN 3
+                WHEN 'Moderate' THEN 3
                 WHEN 'Low' THEN 4
                 ELSE 5
             END ASC,

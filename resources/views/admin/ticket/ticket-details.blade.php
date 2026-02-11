@@ -18,7 +18,7 @@
                                     $priorityColors = [
                                         'Critical' => 'text-red-700 bg-red-100',
                                         'High' => 'text-orange-700 bg-orange-100',
-                                        'Medium' => 'text-yellow-700 bg-yellow-100',
+                                        'Moderate' => 'text-yellow-700 bg-yellow-100',
                                         'Low' => 'text-green-700 bg-green-100',
                                     ];
                                     $pColor = $priorityColors[$ticket->priority] ?? 'text-gray-700 bg-gray-100';
@@ -58,7 +58,7 @@
                                                     <td class="py-2 text-center">8 hours</td>
                                                 </tr>
                                                 <tr class="border-b border-gray-200">
-                                                    <td class="py-2">Medium</td>
+                                                    <td class="py-2">Moderate</td>
                                                     <td class="py-2 text-center">4 hours</td>
                                                     <td class="py-2 text-center">2 days</td>
                                                 </tr>
@@ -196,7 +196,8 @@
                                     <option value="Critical" {{ $ticket->priority == 'Critical' ? 'selected' : '' }}>Critical
                                     </option>
                                     <option value="High" {{ $ticket->priority == 'High' ? 'selected' : '' }}>High</option>
-                                    <option value="Medium" {{ $ticket->priority == 'Medium' ? 'selected' : '' }}>Medium</option>
+                                    <option value="Moderate" {{ $ticket->priority == 'Moderate' ? 'selected' : '' }}>Moderate
+                                    </option>
                                     <option value="Low" {{ $ticket->priority == 'Low' ? 'selected' : '' }}>Low</option>
                                 </select>
                             </div>

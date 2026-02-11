@@ -25,8 +25,8 @@ class SLATableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'priority' => 'Normal',
-                'response_time_minutes' => 240,    // 8 hours
+                'priority' => 'Moderate',
+                'response_time_minutes' => 240,    // 4 hours
                 'resolution_time_minutes' => 2880, // 3 days
                 'created_at' => now(),
                 'updated_at' => now(),
